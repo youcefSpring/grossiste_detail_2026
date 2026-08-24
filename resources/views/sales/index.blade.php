@@ -22,7 +22,7 @@
     </form>
 
     <div class="table-card table-scroll">
-        <table class="table min-w-[680px]">
+        <table class="table table-stack md:min-w-[680px]">
             <thead>
                 <tr>
                     <th class="num">{{ __('sale.fields.invoice_number') }}</th>
@@ -37,18 +37,18 @@
                 @forelse ($sales as $sale)
                     <tr class="cursor-pointer {{ $sale->isVoided() ? 'row-muted line-through' : ($sale->due_amount > 0 ? 'row-warn' : '') }}"
                         onclick="window.location='{{ route('sales.show', $sale) }}'">
-                        <td class="num font-medium">{{ $sale->invoice_number }}</td>
-                        <td>{{ $sale->customer?->name ?? '/' }}</td>
-                        <td class="num text-slate-500">{{ $sale->sold_at->format('Y-m-d H:i') }}</td>
-                        <td class="num font-medium">{{ money($sale->total) }}</td>
-                        <td class="num">
+                        <td class="num font-medium"><bdi>{{ $sale->invoice_number }}</bdi></td>
+                        <td data-label="{{ __('sale.fields.customer_id') }}">{{ $sale->customer?->name ?? '/' }}</td>
+                        <td class="num text-slate-500" data-label="{{ __('sale.fields.sold_at') }}"><bdi>{{ $sale->sold_at->format('Y-m-d H:i') }}</bdi></td>
+                        <td class="num font-medium" data-label="{{ __('purchase.total') }}"><bdi>{{ money($sale->total) }}</bdi></td>
+                        <td class="num" data-label="{{ __('purchase.due') }}">
                             @if ($sale->due_amount > 0)
                                 <span class="text-amber-700 font-medium">{{ money($sale->due_amount) }}</span>
                             @else
                                 <span class="text-emerald-600">{{ __('purchase.paid') }}</span>
                             @endif
                         </td>
-                        <td class="text-slate-500">{{ $sale->user?->name }}</td>
+                        <td class="text-slate-500" data-label="{{ __('sale.fields.user_id') }}">{{ $sale->user?->name }}</td>
                     </tr>
                 @empty
                     <tr><td colspan="6" class="table-empty">{{ __('sale.none') }}</td></tr>

@@ -40,8 +40,8 @@
     </form>
 
     {{-- Desktop --}}
-    <div class="hidden md:block table-card table-scroll">
-        <table class="table">
+    <div class="table-card table-scroll">
+        <table class="table table-stack">
             <thead>
                 <tr>
                     <th>{{ __('product.fields.name') }}</th>
@@ -58,12 +58,12 @@
                             <div class="font-medium">{{ $product->name }}</div>
                             <div class="text-xs text-slate-400">{{ $product->category?->name ?? '/' }}</div>
                         </td>
-                        <td class="num font-semibold">
-                            {{ (float) $product->stock }}
+                        <td class="num font-semibold" data-label="{{ __('product.fields.stock') }}">
+                            <bdi>{{ (float) $product->stock }}</bdi>
                             <span class="text-xs font-normal text-slate-400">{{ __('product.units.'.$product->unit) }}</span>
                         </td>
-                        <td class="num text-slate-500">{{ (float) $product->min_stock }}</td>
-                        <td class="mid"><x-stock-badge :status="$product->stock_status" /></td>
+                        <td class="num text-slate-500" data-label="{{ __('product.fields.min_stock') }}"><bdi>{{ (float) $product->min_stock }}</bdi></td>
+                        <td class="mid" data-label="{{ __('product.status') }}"><x-stock-badge :status="$product->stock_status" /></td>
                         <td class="actions">
                             <div class="flex items-center justify-end gap-1">
                                 @can('stock.adjust')
@@ -80,35 +80,6 @@
                 @endforelse
             </tbody>
         </table>
-    </div>
-
-    {{-- Mobile --}}
-    <div class="md:hidden space-y-2">
-        @forelse ($products as $product)
-            <div class="bg-white rounded-2xl shadow-sm p-4">
-                <div class="flex justify-between gap-3">
-                    <div class="min-w-0">
-                        <div class="font-medium truncate">{{ $product->name }}</div>
-                        <div class="text-xs text-slate-400">{{ $product->category?->name ?? '/' }}</div>
-                    </div>
-                    <x-stock-badge :status="$product->stock_status" />
-                </div>
-                <div class="mt-3 flex items-end justify-between">
-                    <div>
-                        <div class="text-2xl font-semibold tabular-nums">{{ (float) $product->stock }}</div>
-                        <div class="text-xs text-slate-400">
-                            {{ __('product.fields.min_stock') }}: {{ (float) $product->min_stock }}
-                        </div>
-                    </div>
-                    @can('stock.adjust')
-                        <a href="{{ route('inventory.adjust', $product) }}"
-                           class="rounded-lg bg-slate-900 text-white px-4 py-2 text-sm">{{ __('stock.adjust') }}</a>
-                    @endcan
-                </div>
-            </div>
-        @empty
-            <div class="bg-white rounded-2xl p-10 text-center text-slate-500">{{ __('stock.none') }}</div>
-        @endforelse
     </div>
 
     {{ $products->links() }}

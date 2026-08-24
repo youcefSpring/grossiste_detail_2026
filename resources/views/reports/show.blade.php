@@ -79,7 +79,9 @@
                                         @if ($column === 'status')
                                             <x-stock-badge :status="$value" />
                                         @elseif (is_int($value) && ! in_array($column, \App\Services\ReportService::COUNT_COLUMNS, true))
-                                            {{ money($value) }}
+                                            <bdi>{{ money($value) }}</bdi>
+                                        @elseif (is_numeric($value))
+                                            <bdi>{{ $value }}</bdi>
                                         @else
                                             {{ $value }}
                                         @endif
@@ -98,8 +100,8 @@
                                         {{ __('report.total') }}
                                     @elseif (is_numeric($rows->first()->$column))
                                         @php($sum = $totals->$column ?? $rows->sum($column))
-                                        {{ is_int($rows->first()->$column) && ! in_array($column, \App\Services\ReportService::COUNT_COLUMNS, true)
-                                            ? money($sum) : round($sum, 3) }}
+                                        <bdi>{{ is_int($rows->first()->$column) && ! in_array($column, \App\Services\ReportService::COUNT_COLUMNS, true)
+                                            ? money($sum) : round($sum, 3) }}</bdi>
                                     @endif
                                 </td>
                             @endforeach

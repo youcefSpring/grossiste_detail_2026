@@ -30,7 +30,7 @@
     </form>
 
     <div class="table-card table-scroll">
-        <table class="table min-w-[640px]">
+        <table class="table table-stack md:min-w-[640px]">
             <thead>
                 <tr>
                     <th class="num">{{ __('stock.date') }}</th>
@@ -44,10 +44,10 @@
             <tbody>
                 @forelse ($movements as $movement)
                     <tr>
-                        <td class="num text-slate-500">
-                            {{ $movement->created_at->format('Y-m-d H:i') }}
+                        <td class="num text-slate-500" data-label="{{ __('stock.date') }}">
+                            <bdi>{{ $movement->created_at->format('Y-m-d H:i') }}</bdi>
                         </td>
-                        <td>{{ $movement->product->name }}</td>
+                        <td class="font-medium">{{ $movement->product->name }}</td>
                         <td>
                             <span class="rounded-full bg-slate-100 px-2.5 py-1 text-xs whitespace-nowrap">
                                 {{ __('stock.types.'.$movement->type) }}
@@ -56,11 +56,12 @@
                                 <div class="text-xs text-slate-400 mt-1">{{ $movement->reason }}</div>
                             @endif
                         </td>
-                        <td class="num font-semibold {{ $movement->quantity > 0 ? 'text-emerald-600' : 'text-red-600' }}">
-                            {{ $movement->quantity > 0 ? '+' : '' }}{{ (float) $movement->quantity }}
+                        <td class="num font-semibold {{ $movement->quantity > 0 ? 'text-emerald-600' : 'text-red-600' }}"
+                            data-label="{{ __('stock.change') }}">
+                            <bdi>{{ $movement->quantity > 0 ? '+' : '' }}{{ (float) $movement->quantity }}</bdi>
                         </td>
-                        <td class="num text-slate-600">{{ (float) $movement->balance_after }}</td>
-                        <td class="text-slate-500">{{ $movement->user?->name ?? '/' }}</td>
+                        <td class="num text-slate-600" data-label="{{ __('stock.balance') }}"><bdi>{{ (float) $movement->balance_after }}</bdi></td>
+                        <td class="text-slate-500" data-label="{{ __('stock.by') }}">{{ $movement->user?->name ?? '/' }}</td>
                     </tr>
                 @empty
                     <tr><td colspan="6" class="table-empty">{{ __('stock.no_movements') }}</td></tr>

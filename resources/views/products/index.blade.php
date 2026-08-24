@@ -28,8 +28,8 @@
     </form>
 
     {{-- Desktop table --}}
-    <div class="hidden md:block table-card table-scroll">
-        <table class="table">
+    <div class="table-card table-scroll">
+        <table class="table table-stack">
             <thead>
                 <tr>
                     <th>{{ __('product.fields.name') }}</th>
@@ -50,13 +50,13 @@
                                 <div class="text-xs text-slate-400 tabular-nums">{{ $product->barcode }}</div>
                             @endif
                         </td>
-                        <td class="text-slate-600">{{ $product->category?->name ?? '/' }}</td>
-                        <td class="num">{{ money($product->retail_price) }}</td>
-                        <td class="num">{{ money($product->wholesale_price) }}</td>
-                        <td class="num">
-                            {{ rtrim(rtrim(number_format($product->stock, 3, ',', ' '), '0'), ',') }}
+                        <td class="text-slate-600" data-label="{{ __('product.fields.category_id') }}">{{ $product->category?->name ?? '/' }}</td>
+                        <td class="num" data-label="{{ __('product.fields.retail_price') }}"><bdi>{{ money($product->retail_price) }}</bdi></td>
+                        <td class="num" data-label="{{ __('product.fields.wholesale_price') }}"><bdi>{{ money($product->wholesale_price) }}</bdi></td>
+                        <td class="num" data-label="{{ __('product.fields.stock') }}">
+                            <bdi>{{ rtrim(rtrim(number_format($product->stock, 3, ',', ' '), '0'), ',') }}</bdi>
                         </td>
-                        <td class="mid">
+                        <td class="mid" data-label="{{ __('product.status') }}">
                             <x-stock-badge :status="$product->stock_status" />
                         </td>
                         <td class="actions">
@@ -71,31 +71,6 @@
                 @endforelse
             </tbody>
         </table>
-    </div>
-
-    {{-- Mobile cards --}}
-    <div class="md:hidden space-y-2">
-        @forelse ($products as $product)
-            <a href="{{ route('products.edit', $product) }}" class="block bg-white rounded-2xl shadow-sm p-4">
-                <div class="flex justify-between gap-3">
-                    <div class="min-w-0">
-                        <div class="font-medium truncate">{{ $product->name }}</div>
-                        <div class="text-xs text-slate-500">{{ $product->category?->name ?? '/' }}</div>
-                    </div>
-                    <x-stock-badge :status="$product->stock_status" />
-                </div>
-                <div class="mt-3 flex justify-between text-sm">
-                    <span class="text-slate-500">{{ __('product.fields.retail_price') }}</span>
-                    <span class="tabular-nums font-medium">{{ money($product->retail_price) }} {{ settings('currency.symbol') }}</span>
-                </div>
-                <div class="mt-1 flex justify-between text-sm">
-                    <span class="text-slate-500">{{ __('product.fields.stock') }}</span>
-                    <span class="tabular-nums font-medium">{{ (float) $product->stock }}</span>
-                </div>
-            </a>
-        @empty
-            <div class="bg-white rounded-2xl p-10 text-center text-slate-500">{{ __('product.none') }}</div>
-        @endforelse
     </div>
 
     {{ $products->links() }}

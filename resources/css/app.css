@@ -137,17 +137,29 @@
     background: #f1f5f9;
 }
 
-/* Alignment: words start-aligned, figures end-aligned, states centred. */
+/* Alignment: words start-aligned, figures end-aligned, states centred.
+   The cell keeps the page direction — forcing it to LTR would throw any
+   Arabic in the cell (a unit, a status word) to the wrong side. Only the
+   figure itself is isolated, with <bdi>. */
 .table .num,
 .table th.num {
-    text-align: end;
     font-variant-numeric: tabular-nums;
-    unicode-bidi: isolate;
-    direction: ltr;
+    unicode-bidi: plaintext;
+    /* `plaintext` decides each cell's direction from its own content, so
+       `end` would land on different sides for "2 050,00" and "مدفوع" in the
+       same column. Pin the alignment to the page direction instead. */
+    text-align: right;
 }
 
-.table th.num {
-    direction: inherit;
+[dir='rtl'] .table .num,
+[dir='rtl'] .table th.num {
+    text-align: left;
+}
+
+/* <bdi> already isolates and infers its own direction; this only stops a
+   figure being broken across lines. */
+bdi {
+    white-space: nowrap;
 }
 
 .table .mid,
@@ -176,6 +188,83 @@
     color: #64748b;
 }
 
+/* --- Tables on a phone -------------------------------------------------
+   Below md, a table stops being a table: each row becomes a card and each
+   cell carries its own label. No horizontal scrolling, which is what makes
+   a wide table unusable on a phone. Cells opt in with data-label. */
+@media (max-width: 767px) {
+    .table-scroll {
+        overflow-x: visible;
+    }
+
+    .table.table-stack {
+        display: block;
+    }
+
+    .table.table-stack thead {
+        display: none;
+    }
+
+    .table.table-stack tbody,
+    .table.table-stack tfoot {
+        display: block;
+    }
+
+    .table.table-stack tbody tr,
+    .table.table-stack tfoot tr {
+        display: block;
+        padding: 0.25rem 0;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .table.table-stack tbody tr:last-child {
+        border-bottom: 0;
+    }
+
+    .table.table-stack td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.4rem 1rem;
+        border: 0 !important;
+        text-align: start;
+    }
+
+    /* The label that the header row used to carry. */
+    .table.table-stack td[data-label]::before {
+        content: attr(data-label);
+        color: #64748b;
+        font-size: 0.75rem;
+        font-weight: 600;
+        flex: none;
+    }
+
+    /* A cell with no label — the row's title, or its actions — spans the row. */
+    .table.table-stack td:not([data-label]) {
+        justify-content: flex-start;
+    }
+
+    .table.table-stack td.actions {
+        justify-content: flex-end;
+        width: auto;
+        padding-top: 0.5rem;
+    }
+
+    .table.table-stack td.num,
+    .table.table-stack td.mid {
+        text-align: start;
+    }
+
+    /* Row tints have to cover the whole card, not each cell. */
+    .table.table-stack tbody tr.row-warn { background: #fffbeb; }
+    .table.table-stack tbody tr.row-danger { background: #fef2f2; }
+    .table.table-stack tbody tr.row-muted { background: #f8fafc; }
+    .table.table-stack tbody tr:nth-child(even) td { background: transparent; }
+    .table.table-stack tbody tr:nth-child(even) { background: #fcfcfd; }
+    .table.table-stack tbody tr:hover td { background: transparent; }
+}
+
 /* --- Selects -----------------------------------------------------------
    The forms plugin pins its arrow to the right, which lands on top of the
    text in Arabic. Draw our own on the inline-end side instead, and match the
@@ -202,12 +291,15 @@ select:disabled {
 }
 
 /* --- Numbers in RTL ----------------------------------------------------
-   money() separates thousands with a space, and in an Arabic paragraph the
-   bidi algorithm would reorder "2 350,00" into "350,00 2". Isolating each
-   number keeps it intact without affecting how the cell is aligned. */
+   money() separates thousands with a space, so in an Arabic paragraph the
+   bidi algorithm reorders "2 350,00" into "350,00 2".
+
+   `plaintext` takes the direction from the first strong character instead of
+   inheriting it: a figure has none, so it lays out left-to-right and stays
+   intact, while a cell that starts with a word still reads right-to-left.
+   That covers both without forcing a direction on anything. */
 .tabular-nums {
-    unicode-bidi: isolate;
-    direction: ltr;
+    unicode-bidi: plaintext;
 }
 
 /* --- Tooltips ----------------------------------------------------------

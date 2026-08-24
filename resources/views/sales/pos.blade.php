@@ -171,7 +171,7 @@
             <input type="number" step="0.01" min="0"
                    class="price w-full rounded-lg border-slate-300 px-2 py-2 text-end tabular-nums">
         </td>
-        <td class="num font-medium total">0,00</td>
+        <td class="num font-medium"><bdi class="total">0,00</bdi></td>
         <td class="mid">
             <button type="button" class="remove text-red-500 text-xl leading-none">&times;</button>
         </td>

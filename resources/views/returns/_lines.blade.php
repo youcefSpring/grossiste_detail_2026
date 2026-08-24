@@ -19,7 +19,7 @@
                         <div class="text-xs text-slate-400 tabular-nums">{{ money($item->unit_price) }}</div>
                         <input type="hidden" name="items[{{ $i }}][sale_item_id]" value="{{ $item->id }}">
                     </td>
-                    <td class="num text-slate-500">{{ (float) $item->quantity }}</td>
+                    <td class="num text-slate-500"><bdi>{{ (float) $item->quantity }}</bdi></td>
                     <td class="num font-medium">{{ $left }}</td>
                     <td>
                         <input type="number" name="items[{{ $i }}][quantity]" class="qty w-full rounded-lg border-slate-300 px-2 py-2 text-end tabular-nums"

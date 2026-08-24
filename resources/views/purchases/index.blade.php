@@ -29,7 +29,7 @@
     </form>
 
     <div class="table-card table-scroll">
-        <table class="table min-w-[640px]">
+        <table class="table table-stack md:min-w-[640px]">
             <thead>
                 <tr>
                     <th class="num">{{ __('purchase.fields.reference') }}</th>
@@ -43,11 +43,11 @@
                 @forelse ($purchases as $purchase)
                     <tr class="cursor-pointer {{ $purchase->due_amount > 0 ? 'row-warn' : '' }}"
                         onclick="window.location='{{ route('purchases.show', $purchase) }}'">
-                        <td class="num font-medium">{{ $purchase->reference }}</td>
-                        <td>{{ $purchase->supplier->name }}</td>
-                        <td class="num text-slate-500">{{ $purchase->purchased_at->format('Y-m-d') }}</td>
-                        <td class="num font-medium">{{ money($purchase->total) }}</td>
-                        <td class="num">
+                        <td class="num font-medium"><bdi>{{ $purchase->reference }}</bdi></td>
+                        <td data-label="{{ __('purchase.fields.supplier_id') }}">{{ $purchase->supplier->name }}</td>
+                        <td class="num text-slate-500" data-label="{{ __('purchase.fields.purchased_at') }}"><bdi>{{ $purchase->purchased_at->format('Y-m-d') }}</bdi></td>
+                        <td class="num font-medium" data-label="{{ __('purchase.total') }}"><bdi>{{ money($purchase->total) }}</bdi></td>
+                        <td class="num" data-label="{{ __('purchase.due') }}">
                             @if ($purchase->due_amount > 0)
                                 <span class="text-amber-700 font-medium">{{ money($purchase->due_amount) }}</span>
                             @else

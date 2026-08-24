@@ -56,9 +56,9 @@
                 @foreach ($sale->items as $item)
                     <tr>
                         <td>{{ $item->product_name }}</td>
-                        <td class="num">{{ (float) $item->quantity }}</td>
-                        <td class="num">{{ money($item->unit_price) }}</td>
-                        <td class="num">{{ money($item->line_total) }}</td>
+                        <td class="num"><bdi>{{ (float) $item->quantity }}</bdi></td>
+                        <td class="num"><bdi>{{ money($item->unit_price) }}</bdi></td>
+                        <td class="num"><bdi>{{ money($item->line_total) }}</bdi></td>
                     </tr>
                 @endforeach
             </tbody>

@@ -34,14 +34,14 @@
                     @foreach ($return->items as $item)
                         <tr>
                             <td>{{ $item->product_name }}</td>
-                            <td class="num">{{ (float) $item->quantity }}</td>
+                            <td class="num"><bdi>{{ (float) $item->quantity }}</bdi></td>
                             <td class="mid">
                                 <span class="rounded-full px-2 py-0.5 text-xs
                                     {{ $item->condition === 'damaged' ? 'bg-red-50 text-red-700' : 'bg-emerald-50 text-emerald-700' }}">
                                     {{ __('return.conditions.'.$item->condition) }}
                                 </span>
                             </td>
-                            <td class="num font-medium">{{ money($item->line_total) }}</td>
+                            <td class="num font-medium"><bdi>{{ money($item->line_total) }}</bdi></td>
                         </tr>
                     @endforeach
                 </tbody>
