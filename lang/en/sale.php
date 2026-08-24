@@ -1,0 +1,46 @@
+<?php
+
+return [
+    'quick_picks' => 'Best sellers',
+    'none' => 'No sales.',
+    'confirm' => 'Confirm sale',
+    'scan_hint' => 'Scan a barcode or search a product...',
+    'cart_empty' => 'Scan a product to start.',
+    'walk_in' => 'Walk-in customer',
+    'exact' => 'Exact amount',
+    'on_credit' => 'On credit',
+    'change' => 'Change due',
+    'customer_owes' => 'Current debt:',
+    'unpaid_only' => 'Unpaid only',
+    'print' => 'Print invoice',
+    'profit' => 'Profit',
+    'thanks' => 'Thank you for your business',
+    'void' => 'Void sale',
+    'void_reason' => 'Reason',
+    'void_hint' => 'Stock goes back and the operation stays on record.',
+    'is_voided' => 'Voided sale',
+    'voided' => 'Invoice :invoice voided, stock returned.',
+    'voided_movement' => 'Voided invoice :invoice',
+    'already_voided' => 'This sale is already voided.',
+    'created' => 'Invoice :invoice recorded.',
+    'not_enough_stock' => 'Not enough stock for :product (available: :available).',
+    'below_min_price' => ':product price is below the minimum :min.',
+    'discount_too_big' => 'Discount exceeds the allowed limit (:percent%).',
+    'credit_limit_reached' => 'Credit limit reached (:limit). Current debt: :balance.',
+
+    'types' => [
+        'retail' => 'Retail',
+        'wholesale' => 'Wholesale',
+    ],
+
+    'fields' => [
+        'invoice_number' => 'Invoice',
+        'customer_id' => 'Customer',
+        'user_id' => 'Sold by',
+        'sold_at' => 'Date',
+        'quantity' => 'Quantity',
+        'unit_price' => 'Price',
+        'discount_amount' => 'Discount',
+        'paid_amount' => 'Amount paid',
+    ],
+];

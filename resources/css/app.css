@@ -1,0 +1,262 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    --font-sans: 'Cairo', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+        'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+/* Arabic reads better slightly larger. */
+[dir='rtl'] body {
+    font-size: 1.02rem;
+}
+
+/* --- Sidebar width -----------------------------------------------------
+   Owned here rather than by a utility class, so the collapsed state has
+   nothing to fight with in the cascade. */
+#sidebar {
+    width: 16rem;
+}
+
+/* Collapsed on desktop: the rail keeps the icons and hides the words.
+   Driven by a class on <html> so it applies before first paint. */
+@media (min-width: 1024px) {
+    .sidebar-collapsed #sidebar {
+        width: 4rem;
+    }
+
+    .sidebar-collapsed #sidebar .sidebar-label {
+        display: none;
+    }
+
+    .sidebar-collapsed #sidebar .sidebar-mark {
+        display: inline;
+    }
+
+    .sidebar-collapsed #sidebar nav a {
+        justify-content: center;
+        padding-inline: 0;
+    }
+
+    .sidebar-collapsed #sidebar > div:first-child {
+        justify-content: center;
+        padding-inline: 0;
+    }
+}
+
+/* --- Tables ------------------------------------------------------------
+   One look for every table in the app. Ruled, but light: the grid guides the
+   eye across a row without boxing every cell in heavy lines.
+   Borders use logical properties so the dividers follow the text direction. */
+.table-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+/* Wide tables scroll inside the card instead of stretching the page. */
+.table-scroll {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.table thead th {
+    background: #f8fafc;
+    color: #475569;
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.01em;
+    padding: 0.75rem 1rem;
+    text-align: start;
+    white-space: nowrap;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.table tbody td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+/* Column dividers, kept faint so the table still reads as rows. */
+.table thead th + th,
+.table tbody td + td,
+.table tfoot td + td {
+    border-inline-start: 1px solid #f1f5f9;
+}
+
+.table thead th + th {
+    border-inline-start-color: #e2e8f0;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.table tbody tr:hover td {
+    background: #f8fafc;
+}
+
+.table tfoot td {
+    padding: 0.75rem 1rem;
+    background: #f8fafc;
+    font-weight: 600;
+    border-top: 1px solid #cbd5e1;
+}
+
+/* Alignment: words start-aligned, figures end-aligned, states centred. */
+.table .num,
+.table th.num {
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+    unicode-bidi: isolate;
+    direction: ltr;
+}
+
+.table th.num {
+    direction: inherit;
+}
+
+.table .mid,
+.table th.mid {
+    text-align: center;
+}
+
+.table .actions {
+    text-align: end;
+    white-space: nowrap;
+    width: 1%;
+}
+
+/* Rows that carry inputs need less vertical padding. */
+.table.table-edit tbody td {
+    padding: 0.4rem 0.5rem;
+}
+
+.table.table-edit tbody tr:hover td {
+    background: transparent;
+}
+
+.table-empty {
+    padding: 2.5rem 1rem;
+    text-align: center;
+    color: #64748b;
+}
+
+/* --- Selects -----------------------------------------------------------
+   The forms plugin pins its arrow to the right, which lands on top of the
+   text in Arabic. Draw our own on the inline-end side instead, and match the
+   height and radius of the text inputs. */
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.6' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 1.15rem 1.15rem;
+    background-position: right 0.7rem center;
+    padding-inline-end: 2.3rem;
+    padding-inline-start: 0.75rem;
+    cursor: pointer;
+}
+
+[dir='rtl'] select {
+    background-position: left 0.7rem center;
+}
+
+select:disabled {
+    background-color: #f8fafc;
+    color: #94a3b8;
+    cursor: not-allowed;
+}
+
+/* --- Numbers in RTL ----------------------------------------------------
+   money() separates thousands with a space, and in an Arabic paragraph the
+   bidi algorithm would reorder "2 350,00" into "350,00 2". Isolating each
+   number keeps it intact without affecting how the cell is aligned. */
+.tabular-nums {
+    unicode-bidi: isolate;
+    direction: ltr;
+}
+
+/* --- Tooltips ----------------------------------------------------------
+   Icon-only actions need a name. Rendered above the control, centred, and
+   hidden from screen readers (which read the .sr-only label instead). */
+.tip {
+    position: relative;
+}
+
+.tip::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0f172a;
+    color: #fff;
+    font-size: 11px;
+    line-height: 1;
+    white-space: nowrap;
+    padding: 6px 8px;
+    border-radius: 6px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.12s;
+    pointer-events: none;
+    z-index: 50;
+}
+
+.tip:hover::after,
+.tip:focus-visible::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* --- Busy states -------------------------------------------------------- */
+.is-busy {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* A small spinner for buttons that are waiting on the server. */
+.spinner {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid currentColor;
+    border-inline-start-color: transparent;
+    border-radius: 9999px;
+    animation: spin 0.6s linear infinite;
+    vertical-align: -0.15rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Reports print as a clean sheet: no app chrome, no controls. */
+@media print {
+    aside,
+    header,
+    #page-loader,
+    .no-print {
+        display: none !important;
+    }
+
+    body {
+        background: #fff;
+    }
+
+    @page {
+        margin: 12mm;
+    }
+}

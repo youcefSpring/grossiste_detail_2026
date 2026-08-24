@@ -1,0 +1,46 @@
+<?php
+
+return [
+    'quick_picks' => 'الأكثر مبيعا',
+    'none' => 'لا توجد مبيعات.',
+    'confirm' => 'تأكيد البيع',
+    'scan_hint' => 'امسح الباركود أو ابحث عن منتج...',
+    'cart_empty' => 'امسح منتجا لبدء البيع.',
+    'walk_in' => 'زبون عابر',
+    'exact' => 'المبلغ بالضبط',
+    'on_credit' => 'بالدين',
+    'change' => 'الباقي للزبون',
+    'customer_owes' => 'دين سابق:',
+    'unpaid_only' => 'غير المسددة فقط',
+    'print' => 'طباعة الفاتورة',
+    'profit' => 'الربح',
+    'thanks' => 'شكرا لتعاملكم معنا',
+    'void' => 'إلغاء البيع',
+    'void_reason' => 'سبب الإلغاء',
+    'void_hint' => 'ترجع الكمية إلى المخزون ويبقى سجل العملية.',
+    'is_voided' => 'عملية ملغاة',
+    'voided' => 'تم إلغاء الفاتورة :invoice وإرجاع المخزون.',
+    'voided_movement' => 'إلغاء الفاتورة :invoice',
+    'already_voided' => 'هذه العملية ملغاة مسبقا.',
+    'created' => 'تم تسجيل الفاتورة :invoice.',
+    'not_enough_stock' => 'الكمية غير كافية من :product (المتوفر :available).',
+    'below_min_price' => 'سعر :product أقل من الحد الأدنى :min.',
+    'discount_too_big' => 'التخفيض يتجاوز الحد المسموح (:percent%).',
+    'credit_limit_reached' => 'تجاوز حد الدين المسموح (:limit). الدين الحالي :balance.',
+
+    'types' => [
+        'retail' => 'تجزئة',
+        'wholesale' => 'جملة',
+    ],
+
+    'fields' => [
+        'invoice_number' => 'رقم الفاتورة',
+        'customer_id' => 'الزبون',
+        'user_id' => 'البائع',
+        'sold_at' => 'التاريخ',
+        'quantity' => 'الكمية',
+        'unit_price' => 'السعر',
+        'discount_amount' => 'تخفيض',
+        'paid_amount' => 'المبلغ المدفوع',
+    ],
+];

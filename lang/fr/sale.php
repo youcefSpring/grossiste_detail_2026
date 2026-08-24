@@ -1,0 +1,46 @@
+<?php
+
+return [
+    'quick_picks' => 'Les plus vendus',
+    'none' => 'Aucune vente.',
+    'confirm' => 'Valider la vente',
+    'scan_hint' => 'Scannez ou cherchez un produit...',
+    'cart_empty' => 'Scannez un produit pour commencer.',
+    'walk_in' => 'Client de passage',
+    'exact' => 'Montant exact',
+    'on_credit' => 'À crédit',
+    'change' => 'Monnaie à rendre',
+    'customer_owes' => 'Dette actuelle :',
+    'unpaid_only' => 'Non réglées',
+    'print' => 'Imprimer la facture',
+    'profit' => 'Bénéfice',
+    'thanks' => 'Merci de votre confiance',
+    'void' => 'Annuler la vente',
+    'void_reason' => 'Motif d\'annulation',
+    'void_hint' => 'Le stock est restitué et l\'opération reste tracée.',
+    'is_voided' => 'Vente annulée',
+    'voided' => 'Facture :invoice annulée, stock restitué.',
+    'voided_movement' => 'Annulation facture :invoice',
+    'already_voided' => 'Cette vente est déjà annulée.',
+    'created' => 'Facture :invoice enregistrée.',
+    'not_enough_stock' => 'Stock insuffisant pour :product (disponible : :available).',
+    'below_min_price' => 'Le prix de :product est sous le minimum :min.',
+    'discount_too_big' => 'Remise supérieure au plafond autorisé (:percent%).',
+    'credit_limit_reached' => 'Plafond de crédit dépassé (:limit). Dette actuelle : :balance.',
+
+    'types' => [
+        'retail' => 'Détail',
+        'wholesale' => 'Gros',
+    ],
+
+    'fields' => [
+        'invoice_number' => 'N° facture',
+        'customer_id' => 'Client',
+        'user_id' => 'Vendeur',
+        'sold_at' => 'Date',
+        'quantity' => 'Quantité',
+        'unit_price' => 'Prix',
+        'discount_amount' => 'Remise',
+        'paid_amount' => 'Montant payé',
+    ],
+];
