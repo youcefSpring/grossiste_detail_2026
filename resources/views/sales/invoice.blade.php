@@ -36,7 +36,7 @@
 
     <div class="py-4 text-sm">
         <span class="text-slate-500">{{ __('sale.fields.customer_id') }}:</span>
-        <span class="font-medium">{{ $sale->customer?->name ?? __('sale.walk_in') }}</span>
+        <span class="font-medium">{{ $sale->customer?->name ?? '/' }}</span>
         @if ($sale->customer?->phone)
             <span class="text-slate-500 tabular-nums"> · {{ $sale->customer->phone }}</span>
         @endif

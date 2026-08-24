@@ -2,7 +2,7 @@
 @section('title', __('return.list'))
 
 @section('content')
-<div class="space-y-4">
+<div class="space-y-4" data-live-root>
     <div class="flex flex-wrap gap-2">
         @can('sale.return')
             <a href="{{ route('returns.create') }}" class="rounded-lg bg-emerald-600 text-white px-5 py-2.5">
@@ -26,7 +26,7 @@
                         <div class="font-medium tabular-nums">{{ $item->reference }}</div>
                         <div class="text-xs text-slate-400">
                             <span class="tabular-nums">{{ $item->sale->invoice_number }}</span>
-                            · {{ $item->customer?->name ?? __('sale.walk_in') }}
+                            · {{ $item->customer?->name ?? '/' }}
                             · {{ $item->returned_at->format('Y-m-d') }}
                         </div>
                     </div>

@@ -58,7 +58,7 @@
                     <a href="{{ route('sales.show', $sale) }}"
                        class="flex items-center justify-between gap-3 py-2 border-b last:border-0 hover:bg-slate-50">
                         <span class="min-w-0">
-                            <span class="block truncate">{{ $sale->customer?->name ?? __('sale.walk_in') }}</span>
+                            <span class="block truncate">{{ $sale->customer?->name ?? '/' }}</span>
                             <span class="block text-xs text-slate-400 tabular-nums">{{ $sale->sold_at->format('H:i') }}</span>
                         </span>
                         <span class="tabular-nums font-medium whitespace-nowrap">{{ money($sale->total) }}</span>

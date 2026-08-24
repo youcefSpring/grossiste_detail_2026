@@ -2,10 +2,10 @@
 @section('title', __('nav.products'))
 
 @section('content')
-<div class="space-y-4">
+<div class="space-y-4" data-live-root>
 
     {{-- Filters --}}
-    <form method="GET" class="bg-white rounded-2xl shadow-sm p-3 flex flex-wrap gap-2 items-center">
+    <form method="GET" data-live class="bg-white rounded-2xl shadow-sm p-3 flex flex-wrap gap-2 items-center">
         <input type="search" name="q" value="{{ request('q') }}"
                placeholder="{{ __('product.search_placeholder') }}"
                class="flex-1 min-w-48 rounded-lg border-slate-300 px-3 py-2.5">
@@ -43,14 +43,14 @@
             </thead>
             <tbody>
                 @forelse ($products as $product)
-                    <tr class="{{ $product->is_active ? '' : 'opacity-50' }}">
+                    <tr class="{{ ! $product->is_active ? 'row-muted' : ($product->stock_status === 'out' ? 'row-danger' : ($product->stock_status === 'low' ? 'row-warn' : '')) }}">
                         <td>
                             <div class="font-medium">{{ $product->name }}</div>
                             @if ($product->barcode)
                                 <div class="text-xs text-slate-400 tabular-nums">{{ $product->barcode }}</div>
                             @endif
                         </td>
-                        <td class="text-slate-600">{{ $product->category?->name ?? '—' }}</td>
+                        <td class="text-slate-600">{{ $product->category?->name ?? '/' }}</td>
                         <td class="num">{{ money($product->retail_price) }}</td>
                         <td class="num">{{ money($product->wholesale_price) }}</td>
                         <td class="num">
@@ -80,7 +80,7 @@
                 <div class="flex justify-between gap-3">
                     <div class="min-w-0">
                         <div class="font-medium truncate">{{ $product->name }}</div>
-                        <div class="text-xs text-slate-500">{{ $product->category?->name ?? '—' }}</div>
+                        <div class="text-xs text-slate-500">{{ $product->category?->name ?? '/' }}</div>
                     </div>
                     <x-stock-badge :status="$product->stock_status" />
                 </div>

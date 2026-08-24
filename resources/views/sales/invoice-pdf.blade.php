@@ -6,7 +6,7 @@
 @section('content')
 <p>
     <span class="muted">{{ __('sale.fields.customer_id') }}:</span>
-    <span class="bold">{{ $sale->customer?->name ?? __('sale.walk_in') }}</span>
+    <span class="bold">{{ $sale->customer?->name ?? '/' }}</span>
     @if ($sale->customer?->phone)
         <span class="muted small"> · {{ $sale->customer->phone }}</span>
     @endif

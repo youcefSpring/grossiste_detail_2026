@@ -20,7 +20,7 @@
                 <div>
                     <div class="font-semibold tabular-nums">{{ $sale->invoice_number }}</div>
                     <div class="text-sm text-slate-500">
-                        {{ $sale->customer?->name ?? __('sale.walk_in') }} · {{ $sale->sold_at->format('Y-m-d') }}
+                        {{ $sale->customer?->name ?? '/' }} · {{ $sale->sold_at->format('Y-m-d') }}
                     </div>
                 </div>
                 <div class="tabular-nums font-medium">{{ money($sale->total) }} {{ settings('currency.symbol') }}</div>

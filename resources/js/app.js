@@ -1,5 +1,6 @@
 import $ from 'jquery'
 import axios from 'axios'
+import { liveSearch } from './live-search'
 import { bumpExisting, money, productSearch } from './product-search'
 
 window.$ = window.jQuery = $
@@ -109,4 +110,7 @@ $(function () {
 
     // Coming back via the back button must not leave the bar stuck on.
     $(window).on('pageshow', () => window.pageLoading(false))
+
+    // Filters on the list screens apply as you type.
+    liveSearch()
 })

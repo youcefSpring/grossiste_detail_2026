@@ -2,7 +2,7 @@
 @section('title', __('nav.suppliers'))
 
 @section('content')
-<div class="space-y-4">
+<div class="space-y-4" data-live-root>
     @if ($totalDebt > 0)
         <div class="rounded-2xl bg-amber-50 p-4 flex items-center justify-between">
             <span class="text-amber-800">{{ __('supplier.total_debt') }}</span>
@@ -12,13 +12,13 @@
         </div>
     @endif
 
-    <form method="GET" class="bg-white rounded-2xl shadow-sm p-3 flex flex-wrap gap-2">
+    <form method="GET" data-live class="bg-white rounded-2xl shadow-sm p-3 flex flex-wrap gap-2">
         <input type="search" name="q" value="{{ request('q') }}" placeholder="{{ __('supplier.search_hint') }}"
                class="flex-1 min-w-48 rounded-lg border-slate-300 px-3 py-2.5">
 
         <label class="flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm whitespace-nowrap">
             <input type="checkbox" name="status" value="debt" @checked(request('status') === 'debt')
-                   class="rounded border-slate-300" onchange="this.form.submit()">
+                   class="rounded border-slate-300">
             {{ __('supplier.with_debt') }}
         </label>
 
@@ -37,7 +37,7 @@
                 <div class="min-w-0">
                     <div class="font-medium truncate">{{ $supplier->name }}</div>
                     <div class="text-sm text-slate-500">
-                        {{ $supplier->phone ?: $supplier->company ?: '—' }}
+                        {{ $supplier->phone ?: $supplier->company ?: '/' }}
                     </div>
                 </div>
                 <div class="text-end whitespace-nowrap">

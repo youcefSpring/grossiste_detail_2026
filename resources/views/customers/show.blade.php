@@ -15,7 +15,7 @@
                         </span>
                     @endif
                 </div>
-                <div class="text-sm text-slate-500 tabular-nums">{{ $customer->phone ?: '—' }}</div>
+                <div class="text-sm text-slate-500 tabular-nums">{{ $customer->phone ?: '/' }}</div>
             </div>
 
             <div class="text-end">

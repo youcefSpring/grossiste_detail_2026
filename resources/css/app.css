@@ -113,6 +113,30 @@
     border-top: 1px solid #cbd5e1;
 }
 
+/* Zebra striping: quiet enough not to fight the row tints below. */
+.table tbody tr:nth-child(even) td {
+    background: #fcfcfd;
+}
+
+/* Rows that need attention carry a tint, so a debt or a rupture is visible
+   without reading the numbers. Hover still wins over both. */
+.table tbody tr.row-warn td {
+    background: #fffbeb;
+}
+
+.table tbody tr.row-danger td {
+    background: #fef2f2;
+}
+
+.table tbody tr.row-muted td {
+    background: #f8fafc;
+    color: #94a3b8;
+}
+
+.table tbody tr:hover td {
+    background: #f1f5f9;
+}
+
 /* Alignment: words start-aligned, figures end-aligned, states centred. */
 .table .num,
 .table th.num {
@@ -217,6 +241,12 @@ select:disabled {
 .tip:focus-visible::after {
     opacity: 1;
     visibility: visible;
+}
+
+/* The table fades slightly while a live search is in flight. */
+.is-loading {
+    opacity: 0.55;
+    transition: opacity 0.12s;
 }
 
 /* --- Busy states -------------------------------------------------------- */

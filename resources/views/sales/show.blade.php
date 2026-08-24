@@ -19,7 +19,7 @@
                     @if ($sale->customer)
                         <a href="{{ route('customers.show', $sale->customer) }}" class="hover:underline">{{ $sale->customer->name }}</a>
                     @else
-                        {{ __('sale.walk_in') }}
+                        /
                     @endif
                     · {{ __('sale.types.'.$sale->type) }}
                 </div>

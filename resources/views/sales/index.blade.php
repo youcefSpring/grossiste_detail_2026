@@ -2,14 +2,14 @@
 @section('title', __('nav.sales'))
 
 @section('content')
-<div class="space-y-4">
-    <form method="GET" class="bg-white rounded-2xl shadow-sm p-3 flex flex-wrap gap-2">
+<div class="space-y-4" data-live-root>
+    <form method="GET" data-live class="bg-white rounded-2xl shadow-sm p-3 flex flex-wrap gap-2">
         <input type="date" name="from" value="{{ request('from') }}" class="rounded-lg border-slate-300 px-3 py-2.5">
         <input type="date" name="to" value="{{ request('to') }}" class="rounded-lg border-slate-300 px-3 py-2.5">
 
         <label class="flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm whitespace-nowrap">
             <input type="checkbox" name="status" value="due" @checked(request('status') === 'due')
-                   class="rounded border-slate-300" onchange="this.form.submit()">
+                   class="rounded border-slate-300">
             {{ __('sale.unpaid_only') }}
         </label>
 
@@ -35,10 +35,10 @@
             </thead>
             <tbody>
                 @forelse ($sales as $sale)
-                    <tr class="cursor-pointer {{ $sale->isVoided() ? 'opacity-50 line-through' : '' }}"
+                    <tr class="cursor-pointer {{ $sale->isVoided() ? 'row-muted line-through' : ($sale->due_amount > 0 ? 'row-warn' : '') }}"
                         onclick="window.location='{{ route('sales.show', $sale) }}'">
                         <td class="num font-medium">{{ $sale->invoice_number }}</td>
-                        <td>{{ $sale->customer?->name ?? __('sale.walk_in') }}</td>
+                        <td>{{ $sale->customer?->name ?? '/' }}</td>
                         <td class="num text-slate-500">{{ $sale->sold_at->format('Y-m-d H:i') }}</td>
                         <td class="num font-medium">{{ money($sale->total) }}</td>
                         <td class="num">

@@ -11,7 +11,7 @@
                     <a href="{{ route('sales.show', $return->sale) }}" class="hover:underline tabular-nums">
                         {{ $return->sale->invoice_number }}
                     </a>
-                    · {{ $return->customer?->name ?? __('sale.walk_in') }}
+                    · {{ $return->customer?->name ?? '/' }}
                 </div>
             </div>
             <div class="text-sm text-slate-500 text-end">

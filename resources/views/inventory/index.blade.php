@@ -2,13 +2,14 @@
 @section('title', __('nav.inventory'))
 
 @section('content')
-<div class="space-y-4">
+<div class="space-y-4" data-live-root>
 
     {{-- Status tabs: one glance tells the whole story --}}
     <div class="flex gap-2 overflow-x-auto pb-1">
         @foreach ([['', 'all', 'bg-slate-900'], ['low', 'low', 'bg-amber-500'], ['out', 'out', 'bg-red-600']] as [$value, $key, $tone])
             @php($active = request('status', '') === $value)
             <a href="{{ route('inventory.index', array_filter(['status' => $value, 'q' => request('q'), 'category_id' => request('category_id')])) }}"
+               data-live-link
                class="whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium
                       {{ $active ? $tone.' text-white' : 'bg-white text-slate-600 shadow-sm' }}">
                 {{ __('stock.filters.'.$key) }}
@@ -22,7 +23,7 @@
         </a>
     </div>
 
-    <form method="GET" class="bg-white rounded-2xl shadow-sm p-3 flex flex-wrap gap-2">
+    <form method="GET" data-live class="bg-white rounded-2xl shadow-sm p-3 flex flex-wrap gap-2">
         <input type="hidden" name="status" value="{{ request('status') }}">
         <input type="search" name="q" value="{{ request('q') }}"
                placeholder="{{ __('product.search_placeholder') }}"
@@ -52,10 +53,10 @@
             </thead>
             <tbody>
                 @forelse ($products as $product)
-                    <tr>
+                    <tr class="{{ $product->stock_status === 'out' ? 'row-danger' : ($product->stock_status === 'low' ? 'row-warn' : '') }}">
                         <td>
                             <div class="font-medium">{{ $product->name }}</div>
-                            <div class="text-xs text-slate-400">{{ $product->category?->name ?? '—' }}</div>
+                            <div class="text-xs text-slate-400">{{ $product->category?->name ?? '/' }}</div>
                         </td>
                         <td class="num font-semibold">
                             {{ (float) $product->stock }}
@@ -88,7 +89,7 @@
                 <div class="flex justify-between gap-3">
                     <div class="min-w-0">
                         <div class="font-medium truncate">{{ $product->name }}</div>
-                        <div class="text-xs text-slate-400">{{ $product->category?->name ?? '—' }}</div>
+                        <div class="text-xs text-slate-400">{{ $product->category?->name ?? '/' }}</div>
                     </div>
                     <x-stock-badge :status="$product->stock_status" />
                 </div>

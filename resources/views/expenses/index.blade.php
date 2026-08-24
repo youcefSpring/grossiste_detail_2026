@@ -2,7 +2,7 @@
 @section('title', __('nav.expenses'))
 
 @section('content')
-<div class="space-y-4">
+<div class="space-y-4" data-live-root>
     <div class="rounded-2xl bg-slate-900 text-white p-5 flex items-center justify-between">
         <div>
             <div class="text-sm opacity-70">{{ __('expense.total_for_period') }}</div>
@@ -13,7 +13,7 @@
         </div>
     </div>
 
-    <form method="GET" class="bg-white rounded-2xl shadow-sm p-3 flex flex-wrap gap-2">
+    <form method="GET" data-live class="bg-white rounded-2xl shadow-sm p-3 flex flex-wrap gap-2">
         <input type="date" name="from" value="{{ $from->format('Y-m-d') }}" class="rounded-lg border-slate-300 px-3 py-2.5">
         <input type="date" name="to" value="{{ $to->format('Y-m-d') }}" class="rounded-lg border-slate-300 px-3 py-2.5">
 
@@ -38,8 +38,8 @@
         @forelse ($expenses as $expense)
             <div class="bg-white rounded-2xl shadow-sm p-4 flex items-center justify-between gap-3">
                 <div class="min-w-0">
-                    <div class="font-medium">{{ $expense->category?->name ?? '—' }}</div>
-                    <div class="text-sm text-slate-500 truncate">{{ $expense->description ?: '—' }}</div>
+                    <div class="font-medium">{{ $expense->category?->name ?? '/' }}</div>
+                    <div class="text-sm text-slate-500 truncate">{{ $expense->description ?: '/' }}</div>
                     <div class="text-xs text-slate-400 tabular-nums">
                         {{ $expense->spent_at->format('Y-m-d') }} · {{ $expense->user?->name }}
                     </div>

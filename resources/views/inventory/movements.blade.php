@@ -2,7 +2,7 @@
 @section('title', __('stock.movements'))
 
 @section('content')
-<div class="space-y-4">
+<div class="space-y-4" data-live-root>
 
     @if ($product)
         <div class="bg-white rounded-2xl shadow-sm p-4 flex items-center justify-between">
@@ -13,7 +13,7 @@
         </div>
     @endif
 
-    <form method="GET" class="bg-white rounded-2xl shadow-sm p-3 flex flex-wrap gap-2">
+    <form method="GET" data-live class="bg-white rounded-2xl shadow-sm p-3 flex flex-wrap gap-2">
         <input type="hidden" name="product_id" value="{{ request('product_id') }}">
 
         <select name="type" class="rounded-lg border-slate-300 py-2.5">
@@ -60,7 +60,7 @@
                             {{ $movement->quantity > 0 ? '+' : '' }}{{ (float) $movement->quantity }}
                         </td>
                         <td class="num text-slate-600">{{ (float) $movement->balance_after }}</td>
-                        <td class="text-slate-500">{{ $movement->user?->name ?? '—' }}</td>
+                        <td class="text-slate-500">{{ $movement->user?->name ?? '/' }}</td>
                     </tr>
                 @empty
                     <tr><td colspan="6" class="table-empty">{{ __('stock.no_movements') }}</td></tr>

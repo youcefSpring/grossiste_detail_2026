@@ -2,8 +2,8 @@
 @section('title', __('nav.purchases'))
 
 @section('content')
-<div class="space-y-4">
-    <form method="GET" class="bg-white rounded-2xl shadow-sm p-3 flex flex-wrap gap-2">
+<div class="space-y-4" data-live-root>
+    <form method="GET" data-live class="bg-white rounded-2xl shadow-sm p-3 flex flex-wrap gap-2">
         <select name="supplier_id" class="rounded-lg border-slate-300 py-2.5">
             <option value="">{{ __('purchase.all_suppliers') }}</option>
             @foreach ($suppliers as $supplier)
@@ -16,7 +16,7 @@
 
         <label class="flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm">
             <input type="checkbox" name="status" value="due" @checked(request('status') === 'due')
-                   class="rounded border-slate-300" onchange="this.form.submit()">
+                   class="rounded border-slate-300">
             {{ __('purchase.unpaid_only') }}
         </label>
 
@@ -41,7 +41,7 @@
             </thead>
             <tbody>
                 @forelse ($purchases as $purchase)
-                    <tr class="cursor-pointer"
+                    <tr class="cursor-pointer {{ $purchase->due_amount > 0 ? 'row-warn' : '' }}"
                         onclick="window.location='{{ route('purchases.show', $purchase) }}'">
                         <td class="num font-medium">{{ $purchase->reference }}</td>
                         <td>{{ $purchase->supplier->name }}</td>

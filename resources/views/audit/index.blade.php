@@ -2,8 +2,8 @@
 @section('title', __('nav.audit'))
 
 @section('content')
-<div class="space-y-4">
-    <form method="GET" class="bg-white rounded-2xl shadow-sm p-3 flex flex-wrap gap-2">
+<div class="space-y-4" data-live-root>
+    <form method="GET" data-live class="bg-white rounded-2xl shadow-sm p-3 flex flex-wrap gap-2">
         <select name="user_id" class="rounded-lg border-slate-300 py-2.5">
             <option value="">{{ __('audit.all_users') }}</option>
             @foreach ($users as $user)
@@ -46,7 +46,7 @@
                         <span class="text-slate-500 tabular-nums">{{ $log->label }}</span>
                     @endif
                     <span class="ms-auto text-xs text-slate-400 tabular-nums whitespace-nowrap">
-                        {{ $log->user?->name ?? '—' }} · {{ $log->created_at->format('Y-m-d H:i') }}
+                        {{ $log->user?->name ?? '/' }} · {{ $log->created_at->format('Y-m-d H:i') }}
                     </span>
                 </summary>
 
@@ -65,8 +65,8 @@
                                     @foreach ($log->new_values as $field => $after)
                                         <tr>
                                             <td class="font-medium">{{ $field }}</td>
-                                            <td class="text-red-700">{{ $log->old_values[$field] ?? '—' }}</td>
-                                            <td class="text-emerald-700">{{ $after ?? '—' }}</td>
+                                            <td class="text-red-700">{{ $log->old_values[$field] ?? '/' }}</td>
+                                            <td class="text-emerald-700">{{ $after ?? '/' }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
