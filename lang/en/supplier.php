@@ -28,4 +28,7 @@ return [
         'amount' => 'Amount',
         'is_active' => 'Active supplier',
     ],
+    'deleted' => ':name deleted.',
+    'delete_confirm' => 'Delete this supplier?',
+    'delete_blocked' => 'Cannot delete: this supplier still has an outstanding balance.',
 ];

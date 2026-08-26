@@ -382,3 +382,47 @@ select:disabled {
         margin: 12mm;
     }
 }
+
+/* --- Phone fixes -------------------------------------------------------
+   Everything below only applies on small screens. */
+
+/* A stacked table is a list of cards: any min-width the desktop layout
+   needed would otherwise push the whole page sideways. */
+@media (max-width: 767px) {
+    .table.table-stack {
+        min-width: 0 !important;
+    }
+
+    /* Inputs inside a stacked row share the line with their label instead
+       of stretching to the full card width. */
+    .table.table-stack td > input,
+    .table.table-stack td > select {
+        flex: 1 1 auto;
+        min-width: 0;
+        width: auto;
+        max-width: 60%;
+    }
+
+    /* The row title cell reads as the card heading. */
+    .table.table-stack td:not([data-label]):first-child {
+        padding-top: 0.7rem;
+        font-weight: 500;
+    }
+}
+
+/* Filter bars: two controls per line rather than a row of slivers. */
+@media (max-width: 639px) {
+    form[data-live] > input,
+    form[data-live] > select,
+    form[data-live] > button,
+    form[data-live] > a,
+    form[data-live] > label {
+        flex: 1 1 calc(50% - 0.25rem);
+        min-width: 0;
+        margin-inline-start: 0 !important;
+    }
+
+    form[data-live] > input[type='search'] {
+        flex-basis: 100%;
+    }
+}

@@ -53,7 +53,7 @@
                 <div class="border-t p-4">
                     @if ($log->action === 'updated' && $log->new_values)
                         <div class="table-card table-scroll">
-                            <table class="table min-w-[380px]">
+                            <table class="table table-stack md:min-w-[380px]">
                                 <thead>
                                     <tr>
                                         <th>{{ __('audit.field') }}</th>
@@ -65,8 +65,8 @@
                                     @foreach ($log->new_values as $field => $after)
                                         <tr>
                                             <td class="font-medium">{{ $field }}</td>
-                                            <td class="text-red-700">{{ $log->old_values[$field] ?? '/' }}</td>
-                                            <td class="text-emerald-700">{{ $after ?? '/' }}</td>
+                                            <td class="text-red-700" data-label="{{ __('audit.before') }}">{{ $log->old_values[$field] ?? '/' }}</td>
+                                            <td class="text-emerald-700" data-label="{{ __('audit.after') }}">{{ $after ?? '/' }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

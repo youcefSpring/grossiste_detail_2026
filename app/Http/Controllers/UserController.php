@@ -80,6 +80,22 @@ class UserController extends Controller
         return $this->done(__('user.updated', ['name' => $user->name]), route('users.index'));
     }
 
+    /** Soft delete: the account goes away, its sales and movements stay attributable. */
+    public function destroy(Request $request, User $user)
+    {
+        if ($user->is($request->user())) {
+            return $this->refuse(__('user.not_yourself'), route('users.index'));
+        }
+
+        if ($user->hasRole('owner') && $this->ownerCount() <= 1) {
+            return $this->refuse(__('user.last_owner'), route('users.index'));
+        }
+
+        $user->delete();
+
+        return $this->done(__('user.deleted', ['name' => $user->name]), route('users.index'));
+    }
+
     /** Deactivate rather than delete — their sales and movements stay attributable. */
     public function toggle(Request $request, User $user)
     {

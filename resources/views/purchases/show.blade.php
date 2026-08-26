@@ -22,7 +22,7 @@
         </div>
 
         <div class="table-card table-scroll">
-            <table class="table min-w-[420px]">
+            <table class="table table-stack md:min-w-[420px]">
                 <thead>
                     <tr>
                         <th>{{ __('product.fields.name') }}</th>
@@ -35,9 +35,9 @@
                     @foreach ($purchase->items as $item)
                         <tr>
                             <td>{{ $item->product_name }}</td>
-                            <td class="num"><bdi>{{ (float) $item->quantity }}</bdi></td>
-                            <td class="num"><bdi>{{ money($item->unit_cost) }}</bdi></td>
-                            <td class="num font-medium"><bdi>{{ money($item->line_total) }}</bdi></td>
+                            <td class="num" data-label="{{ __('purchase.fields.quantity') }}"><bdi>{{ (float) $item->quantity }}</bdi></td>
+                            <td class="num" data-label="{{ __('purchase.fields.unit_cost') }}"><bdi>{{ money($item->unit_cost) }}</bdi></td>
+                            <td class="num font-medium" data-label="{{ __('purchase.line_total') }}"><bdi>{{ money($item->line_total) }}</bdi></td>
                         </tr>
                     @endforeach
                 </tbody>

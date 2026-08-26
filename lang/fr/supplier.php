@@ -28,4 +28,7 @@ return [
         'amount' => 'Montant',
         'is_active' => 'Fournisseur actif',
     ],
+    'deleted' => ':name a été supprimé.',
+    'delete_confirm' => 'Supprimer ce fournisseur ?',
+    'delete_blocked' => 'Impossible : ce fournisseur a un solde non réglé.',
 ];

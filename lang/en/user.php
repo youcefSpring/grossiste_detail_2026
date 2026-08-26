@@ -37,4 +37,6 @@ return [
         'warehouse' => 'Stock and stock counts only.',
         'accountant' => 'Payments, expenses and financial reports.',
     ],
+    'deleted' => ':name deleted.',
+    'delete_confirm' => 'Delete this user?',
 ];

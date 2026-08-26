@@ -36,7 +36,7 @@
         @include('partials.product-search', ['placeholder' => __('purchase.search_hint'), 'big' => false])
 
         <div class="table-card table-scroll">
-            <table class="table table-edit min-w-[560px]">
+            <table class="table table-edit table-stack md:min-w-[560px]">
                 <thead>
                     <tr>
                         <th>{{ __('product.fields.name') }}</th>
@@ -125,15 +125,15 @@
             <div class="font-medium name"></div>
             <input type="hidden" class="f-product">
         </td>
-        <td class="p-2">
+        <td class="p-2" data-label="{{ __('purchase.fields.quantity') }}">
             <input type="number" step="0.001" min="0.001" value="1"
                    class="qty w-full rounded-lg border-slate-300 px-2 py-2 text-end tabular-nums">
         </td>
-        <td class="p-2">
+        <td class="p-2" data-label="{{ __('purchase.fields.unit_cost') }}">
             <input type="number" step="0.01" min="0"
                    class="cost w-full rounded-lg border-slate-300 px-2 py-2 text-end tabular-nums">
         </td>
-        <td class="num font-medium"><bdi class="total">0,00</bdi></td>
+        <td class="num font-medium" data-label="{{ __('purchase.line_total') }}"><bdi class="total">0,00</bdi></td>
         <td class="mid">
             <button type="button" class="remove text-red-500 text-lg leading-none">&times;</button>
         </td>

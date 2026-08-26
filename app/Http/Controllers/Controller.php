@@ -22,4 +22,19 @@ abstract class Controller
 
         return redirect($redirect)->with('status', $message);
     }
+
+    /**
+     * Refuse a write, with the reason.
+     *
+     * 422 so the modal's error handler shows the message as a toast instead of
+     * the generic failure text.
+     */
+    protected function refuse(string $message, string $redirect): JsonResponse|RedirectResponse
+    {
+        if (is_modal()) {
+            return response()->json(['ok' => false, 'message' => $message], 422);
+        }
+
+        return redirect($redirect)->with('error', $message);
+    }
 }

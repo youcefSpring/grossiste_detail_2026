@@ -37,4 +37,6 @@ return [
         'warehouse' => 'Stock et inventaire uniquement.',
         'accountant' => 'Règlements, dépenses et rapports financiers.',
     ],
+    'deleted' => ':name a été supprimé.',
+    'delete_confirm' => 'Supprimer cet utilisateur ?',
 ];

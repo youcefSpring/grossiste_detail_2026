@@ -72,6 +72,21 @@ class CustomerController extends Controller
         );
     }
 
+    /** Archive the customer. Their sales stay readable — this is a soft delete. */
+    public function destroy(Customer $customer)
+    {
+        if ((int) $customer->balance !== 0) {
+            return $this->refuse(__('customer.delete_blocked'), route('customers.index'));
+        }
+
+        $customer->delete();
+
+        return $this->done(
+            __('customer.deleted', ['name' => $customer->name]),
+            route('customers.index'),
+        );
+    }
+
     /** Customer hands over money against their debt. */
     public function collect(Request $request, Customer $customer)
     {

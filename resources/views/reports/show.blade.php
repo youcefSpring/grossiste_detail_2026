@@ -60,7 +60,7 @@
         @else
             @php($columns = array_keys((array) $rows->first()))
             <div class="table-card table-scroll">
-                <table class="table">
+                <table class="table table-stack">
                     <thead>
                         <tr>
                             @foreach ($columns as $column)
@@ -75,7 +75,7 @@
                             <tr>
                                 @foreach ($columns as $column)
                                     @php($value = $row->$column)
-                                    <td class="{{ $loop->first ? '' : 'num' }}">
+                                    <td class="{{ $loop->first ? '' : 'num' }}" @if (! $loop->first) data-label="{{ __("report.columns.{$report}.{$column}") }}" @endif>
                                         @if ($column === 'status')
                                             <x-stock-badge :status="$value" />
                                         @elseif (is_int($value) && ! in_array($column, \App\Services\ReportService::COUNT_COLUMNS, true))

@@ -26,4 +26,7 @@ return [
         'note' => 'Note',
         'is_active' => 'Client actif',
     ],
+    'deleted' => ':name a été supprimé.',
+    'delete_confirm' => 'Supprimer ce client ?',
+    'delete_blocked' => 'Impossible : ce client a un solde non réglé.',
 ];

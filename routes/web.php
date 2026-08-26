@@ -65,6 +65,7 @@ Route::middleware('auth')->group(function () {
         Route::post('suppliers', [SupplierController::class, 'store'])->name('suppliers.store');
         Route::get('suppliers/{supplier}/edit', [SupplierController::class, 'edit'])->name('suppliers.edit');
         Route::put('suppliers/{supplier}', [SupplierController::class, 'update'])->name('suppliers.update');
+        Route::delete('suppliers/{supplier}', [SupplierController::class, 'destroy'])->name('suppliers.destroy');
     });
 
     Route::post('suppliers/{supplier}/pay', [SupplierController::class, 'pay'])
@@ -107,6 +108,7 @@ Route::middleware('auth')->group(function () {
         Route::post('customers', [CustomerController::class, 'store'])->name('customers.store');
         Route::get('customers/{customer}/edit', [CustomerController::class, 'edit'])->name('customers.edit');
         Route::put('customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
+        Route::delete('customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
     });
 
     Route::post('customers/{customer}/collect', [CustomerController::class, 'collect'])
@@ -155,6 +157,7 @@ Route::middleware('auth')->group(function () {
         Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
         Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
         Route::post('users/{user}/toggle', [UserController::class, 'toggle'])->name('users.toggle');
+        Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     });
 
     Route::middleware('can:settings.manage')->group(function () {

@@ -54,9 +54,17 @@
                 </a>
 
                 @can('supplier.manage')
-                    <x-action icon="edit" :label="__('common.edit')" :href="route('suppliers.edit', $supplier)"
-                              data-modal data-modal-title="{{ __('supplier.edit') }}"
-                              class="absolute top-2 end-2 opacity-0 group-hover:opacity-100 focus:opacity-100 bg-white/80" />
+                    <div class="absolute top-2 end-2 flex gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
+                        <x-action icon="edit" :label="__('common.edit')" :href="route('suppliers.edit', $supplier)"
+                                  data-modal data-modal-title="{{ __('supplier.edit') }}"
+                                  class="bg-white/80" />
+
+                        <x-action icon="delete" :label="__('common.delete')" tone="danger"
+                                  data-modal-delete
+                                  data-url="{{ route('suppliers.destroy', $supplier) }}"
+                                  data-message="{{ __('supplier.delete_confirm') }}"
+                                  class="bg-white/80" />
+                    </div>
                 @endcan
             </div>
         @empty

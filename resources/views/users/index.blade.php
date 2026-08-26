@@ -53,6 +53,11 @@
                                       :confirm="$user->is_active ? __('user.disable_confirm') : __('user.enable_confirm')"
                                       type="submit" />
                         </form>
+
+                        <x-action icon="delete" :label="__('common.delete')" tone="danger"
+                                  data-modal-delete
+                                  data-url="{{ route('users.destroy', $user) }}"
+                                  data-message="{{ __('user.delete_confirm') }}" />
                     @endunless
                 </div>
             </div>

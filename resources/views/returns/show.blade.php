@@ -21,7 +21,7 @@
         </div>
 
         <div class="table-card table-scroll">
-            <table class="table min-w-[420px]">
+            <table class="table table-stack md:min-w-[420px]">
                 <thead>
                     <tr>
                         <th>{{ __('product.fields.name') }}</th>
@@ -34,14 +34,14 @@
                     @foreach ($return->items as $item)
                         <tr>
                             <td>{{ $item->product_name }}</td>
-                            <td class="num"><bdi>{{ (float) $item->quantity }}</bdi></td>
-                            <td class="mid">
+                            <td class="num" data-label="{{ __('sale.fields.quantity') }}"><bdi>{{ (float) $item->quantity }}</bdi></td>
+                            <td class="mid" data-label="{{ __('return.condition') }}">
                                 <span class="rounded-full px-2 py-0.5 text-xs
                                     {{ $item->condition === 'damaged' ? 'bg-red-50 text-red-700' : 'bg-emerald-50 text-emerald-700' }}">
                                     {{ __('return.conditions.'.$item->condition) }}
                                 </span>
                             </td>
-                            <td class="num font-medium"><bdi>{{ money($item->line_total) }}</bdi></td>
+                            <td class="num font-medium" data-label="{{ __('purchase.line_total') }}"><bdi>{{ money($item->line_total) }}</bdi></td>
                         </tr>
                     @endforeach
                 </tbody>

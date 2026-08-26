@@ -68,6 +68,21 @@ class SupplierController extends Controller
         );
     }
 
+    /** Archive the supplier. Their purchases stay readable — this is a soft delete. */
+    public function destroy(Supplier $supplier)
+    {
+        if ((int) $supplier->balance !== 0) {
+            return $this->refuse(__('supplier.delete_blocked'), route('suppliers.index'));
+        }
+
+        $supplier->delete();
+
+        return $this->done(
+            __('supplier.deleted', ['name' => $supplier->name]),
+            route('suppliers.index'),
+        );
+    }
+
     /** Hand the supplier money against the running balance. */
     public function pay(Request $request, Supplier $supplier)
     {

@@ -49,7 +49,7 @@
             @endif
 
             <div class="table-card table-scroll">
-                <table class="table table-edit min-w-[520px]">
+                <table class="table table-edit table-stack md:min-w-[520px]">
                     <thead>
                         <tr>
                             <th>{{ __('product.fields.name') }}</th>
@@ -148,7 +148,7 @@
             </label>
 
             <button id="confirm" disabled
-                    class="w-full rounded-xl bg-emerald-600 text-white py-4 text-lg font-semibold disabled:opacity-40">
+                    class="sticky bottom-2 lg:static z-10 w-full rounded-xl bg-emerald-600 text-white py-4 text-lg font-semibold shadow-lg lg:shadow-none disabled:opacity-40">
                 {{ __('sale.confirm') }}
                 <span class="text-xs font-normal opacity-75">F9</span>
             </button>
@@ -163,15 +163,15 @@
             <div class="text-xs text-slate-400 stock"></div>
             <input type="hidden" class="f-product">
         </td>
-        <td>
+        <td data-label="{{ __('sale.fields.quantity') }}">
             <input type="number" step="0.001" min="0.001" value="1"
                    class="qty w-full rounded-lg border-slate-300 px-2 py-2 text-end tabular-nums">
         </td>
-        <td>
+        <td data-label="{{ __('sale.fields.unit_price') }}">
             <input type="number" step="0.01" min="0"
                    class="price w-full rounded-lg border-slate-300 px-2 py-2 text-end tabular-nums">
         </td>
-        <td class="num font-medium"><bdi class="total">0,00</bdi></td>
+        <td class="num font-medium" data-label="{{ __('purchase.line_total') }}"><bdi class="total">0,00</bdi></td>
         <td class="mid">
             <button type="button" class="remove text-red-500 text-xl leading-none">&times;</button>
         </td>

@@ -26,4 +26,7 @@ return [
         'note' => 'Note',
         'is_active' => 'Active customer',
     ],
+    'deleted' => ':name deleted.',
+    'delete_confirm' => 'Delete this customer?',
+    'delete_blocked' => 'Cannot delete: this customer still has an outstanding balance.',
 ];
