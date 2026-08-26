@@ -16,7 +16,7 @@ class PurchaseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'supplier_id' => ['required', 'exists:suppliers,id'],
+            'supplier_id' => ['nullable', 'exists:suppliers,id'],
             'purchased_at' => ['required', 'date', 'before_or_equal:today'],
             'items' => ['required', 'array', 'min:1'],
             'items.*.product_id' => ['required', 'exists:products,id'],
@@ -29,6 +29,30 @@ class PurchaseRequest extends FormRequest
         ];
     }
 
+    /**
+     * With no supplier there is no account to carry what is left owing, so a
+     * purchase without one has to be paid in full.
+     */
+    public function after(): array
+    {
+        return [function ($validator) {
+            if ($this->filled('supplier_id') || $validator->errors()->isNotEmpty()) {
+                return;
+            }
+
+            $data = $this->purchaseData();
+            $subtotal = array_sum(array_map(
+                fn ($item) => (int) round($item['quantity'] * $item['unit_cost']),
+                $data['items'],
+            ));
+            $total = $subtotal - min($data['discount_amount'], $subtotal);
+
+            if ($data['paid_amount'] < $total) {
+                $validator->errors()->add('supplier_id', __('purchase.supplier_needed_for_credit'));
+            }
+        }];
+    }
+
     public function attributes(): array
     {
         return __('purchase.fields');
@@ -38,7 +62,7 @@ class PurchaseRequest extends FormRequest
     public function purchaseData(): array
     {
         return [
-            'supplier_id' => (int) $this->input('supplier_id'),
+            'supplier_id' => $this->input('supplier_id') ?: null,
             'purchased_at' => $this->input('purchased_at'),
             'discount_amount' => centimes($this->input('discount_amount') ?: 0),
             'paid_amount' => centimes($this->input('paid_amount') ?: 0),

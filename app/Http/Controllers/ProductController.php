@@ -22,7 +22,7 @@ class ProductController extends Controller
             ->when($request->input('status') === 'inactive', fn ($q) => $q->where('is_active', false))
             ->when($request->input('status') === 'active', fn ($q) => $q->where('is_active', true))
             ->orderBy('name')
-            ->paginate(25)
+            ->paginate(per_page())
             ->withQueryString();
 
         return view('products.index', [
@@ -58,9 +58,10 @@ class ProductController extends Controller
             return $product;
         });
 
-        return redirect()
-            ->route('products.index')
-            ->with('status', __('product.created', ['name' => $product->name]));
+        return $this->done(
+            __('product.created', ['name' => $product->name]),
+            route('products.index'),
+        );
     }
 
     public function edit(Product $product)
@@ -87,18 +88,20 @@ class ProductController extends Controller
             $this->stock->setQuantity($product, $request->float('stock'), 'adjustment', reason: __('product.stock_edited'));
         });
 
-        return redirect()
-            ->route('products.index')
-            ->with('status', __('product.updated', ['name' => $product->name]));
+        return $this->done(
+            __('product.updated', ['name' => $product->name]),
+            route('products.index'),
+        );
     }
 
     public function destroy(Product $product)
     {
         $product->delete();
 
-        return redirect()
-            ->route('products.index')
-            ->with('status', __('product.deleted', ['name' => $product->name]));
+        return $this->done(
+            __('product.deleted', ['name' => $product->name]),
+            route('products.index'),
+        );
     }
 
     /** JSON feed for the jQuery barcode/search box (POS reuses this). */

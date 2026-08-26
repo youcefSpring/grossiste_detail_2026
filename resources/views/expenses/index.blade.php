@@ -28,8 +28,10 @@
 
         <button class="rounded-lg bg-slate-900 text-white px-5 py-2.5">{{ __('app.search') }}</button>
 
+        @include('partials.per-page')
+
         @can('expense.manage')
-            <a href="{{ route('expenses.create') }}"
+            <a href="{{ route('expenses.create') }}" data-modal data-modal-title="{{ __('expense.add') }}"
                class="rounded-lg bg-emerald-600 text-white px-5 py-2.5 ms-auto">+ {{ __('expense.add') }}</a>
         @endcan
     </form>
@@ -48,7 +50,13 @@
                     <div class="font-semibold tabular-nums">{{ money($expense->amount) }}</div>
                     @can('expense.manage')
                         <x-action icon="edit" :label="__('common.edit')"
-                                  :href="route('expenses.edit', $expense)" class="w-8 h-8" />
+                                  :href="route('expenses.edit', $expense)" class="w-8 h-8"
+                                  data-modal data-modal-title="{{ __('expense.edit') }}" />
+
+                        <x-action icon="delete" :label="__('common.delete')" tone="danger" class="w-8 h-8"
+                                  data-modal-delete
+                                  data-url="{{ route('expenses.destroy', $expense) }}"
+                                  data-message="{{ __('expense.delete_confirm') }}" />
                     @endcan
                 </div>
             </div>

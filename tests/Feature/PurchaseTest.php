@@ -112,6 +112,33 @@ class PurchaseTest extends TestCase
         $this->assertSame(0, (int) Supplier::sole()->balance);
     }
 
+    public function test_a_cash_purchase_can_be_recorded_without_a_supplier(): void
+    {
+        $this->actingAsRole('manager');
+        $payload = $this->payload(['supplier_id' => '', 'paid_amount' => 7500]);
+
+        $this->post(route('purchases.store'), $payload)->assertRedirect();
+
+        $purchase = Purchase::latest('id')->first();
+        $this->assertNull($purchase->supplier_id);
+        $this->assertSame(0, (int) $purchase->due_amount);
+
+        // Money left the till even though no account carries it.
+        $payment = Payment::where('payable_id', $purchase->id)->firstOrFail();
+        $this->assertSame('out', $payment->direction);
+        $this->assertSame('supplier', $payment->party_type);
+    }
+
+    public function test_a_purchase_without_a_supplier_must_be_paid_in_full(): void
+    {
+        $this->actingAsRole('manager');
+
+        $this->post(route('purchases.store'), $this->payload(['supplier_id' => '', 'paid_amount' => 1000]))
+            ->assertSessionHasErrors('supplier_id');
+
+        $this->assertSame(0, Purchase::count());
+    }
+
     public function test_a_purchase_needs_at_least_one_line(): void
     {
         $this->actingAsRole('purchasing');

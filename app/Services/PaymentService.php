@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\Customer;
 use App\Models\Payment;
+use App\Models\Purchase;
+use App\Models\PurchaseReturn;
 use App\Models\Supplier;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +21,8 @@ class PaymentService
 {
     /**
      * Record a payment against an invoice. The balance is handled by the calling flow.
-     * A null party is a walk-in customer: cash in, no account to track.
+     * A null party is a walk-in: cash in for a sale, cash out for a purchase,
+     * with no account to track it against.
      */
     public function against(?Model $party, int $amount, string $method, ?Model $payable = null, ?string $note = null): Payment
     {
@@ -42,7 +45,11 @@ class PaymentService
 
     private function write(?Model $party, int $amount, string $method, ?Model $payable, string $paidAt, ?string $note): Payment
     {
-        $isSupplier = $party instanceof Supplier;
+        // With no party, the document itself says which way the money went:
+        // anything paid against a purchase leaves the till.
+        $isSupplier = $party instanceof Supplier
+            || $payable instanceof Purchase
+            || $payable instanceof PurchaseReturn;
 
         return Payment::create([
             'direction' => $isSupplier ? 'out' : 'in',

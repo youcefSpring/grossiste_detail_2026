@@ -7,9 +7,13 @@
         <div class="flex flex-wrap items-start justify-between gap-3">
             <div>
                 <div class="text-xl font-semibold tabular-nums">{{ $purchase->reference }}</div>
-                <a href="{{ route('suppliers.show', $purchase->supplier) }}" class="text-slate-600 hover:underline">
-                    {{ $purchase->supplier->name }}
-                </a>
+                @if ($purchase->supplier)
+                    <a href="{{ route('suppliers.show', $purchase->supplier) }}" class="text-slate-600 hover:underline">
+                        {{ $purchase->supplier->name }}
+                    </a>
+                @else
+                    <span class="text-slate-600">/</span>
+                @endif
             </div>
             <div class="text-sm text-slate-500 text-end">
                 <div class="tabular-nums">{{ $purchase->purchased_at->format('Y-m-d') }}</div>
@@ -70,7 +74,7 @@
         @endif
     </div>
 
-    @if ($purchase->due_amount > 0)
+    @if ($purchase->due_amount > 0 && $purchase->supplier)
         <div class="rounded-2xl bg-amber-50 p-4 text-sm text-amber-800">
             {{ __('purchase.settle_hint') }}
             <a href="{{ route('suppliers.show', $purchase->supplier) }}" class="font-medium underline">

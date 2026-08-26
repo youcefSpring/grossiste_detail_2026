@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'no_supplier' => 'No supplier (cash purchase)',
+    'supplier_needed_for_credit' => 'Pick a supplier, or pay the purchase in full: there is no account to carry what is left.',
     'new' => 'New purchase',
     'none' => 'No purchases.',
     'confirm' => 'Confirm purchase',

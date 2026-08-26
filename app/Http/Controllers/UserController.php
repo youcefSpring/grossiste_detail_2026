@@ -6,16 +6,26 @@ use App\Models\User;
 use App\Support\Permissions;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rules\Password;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('users.index', [
-            'users' => User::with('roles')->orderBy('name')->paginate(25),
-        ]);
+        $term = trim((string) $request->input('q'));
+
+        $users = User::with('roles')
+            ->when($term !== '', fn ($query) => $query->where(fn ($q) => $q
+                ->where('name', 'like', "%{$term}%")
+                ->orWhere('email', 'like', "%{$term}%")
+                ->orWhere('phone', 'like', "%{$term}%")))
+            ->orderBy('name')
+            ->paginate(per_page())
+            ->withQueryString();
+
+        return view('users.index', ['users' => $users]);
     }
 
     public function create()
@@ -37,9 +47,7 @@ class UserController extends Controller
 
         $user->syncRoles([$data['role']]);
 
-        return redirect()
-            ->route('users.index')
-            ->with('status', __('user.created', ['name' => $user->name]));
+        return $this->done(__('user.created', ['name' => $user->name]), route('users.index'));
     }
 
     public function edit(User $user)
@@ -56,7 +64,8 @@ class UserController extends Controller
 
         // Check before writing anything: demoting the only owner would lock everyone out.
         if ($user->hasRole('owner') && $data['role'] !== 'owner' && $this->ownerCount() <= 1) {
-            return back()->withInput()->withErrors(['role' => __('user.last_owner')]);
+            // Thrown rather than redirected, so a modal submit gets a 422 it can render.
+            throw ValidationException::withMessages(['role' => __('user.last_owner')]);
         }
 
         $attributes = collect($data)->except(['role', 'password'])->all();
@@ -68,9 +77,7 @@ class UserController extends Controller
         $user->update($attributes);
         $user->syncRoles([$data['role']]);
 
-        return redirect()
-            ->route('users.index')
-            ->with('status', __('user.updated', ['name' => $user->name]));
+        return $this->done(__('user.updated', ['name' => $user->name]), route('users.index'));
     }
 
     /** Deactivate rather than delete — their sales and movements stay attributable. */

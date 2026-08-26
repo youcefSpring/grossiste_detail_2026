@@ -21,8 +21,10 @@
 
         <button class="rounded-lg bg-slate-900 text-white px-5 py-2.5">{{ __('app.search') }}</button>
 
+        @include('partials.per-page')
+
         @can('product.manage')
-            <a href="{{ route('products.create') }}"
+            <a href="{{ route('products.create') }}" data-modal data-modal-title="{{ __('product.add') }}"
                class="rounded-lg bg-emerald-600 text-white px-5 py-2.5 ms-auto">+ {{ __('product.add') }}</a>
         @endcan
     </form>
@@ -62,7 +64,13 @@
                         <td class="actions">
                             @can('product.manage')
                                 <x-action icon="edit" :label="__('common.edit')"
-                                          :href="route('products.edit', $product)" />
+                                          :href="route('products.edit', $product)"
+                                          data-modal data-modal-title="{{ __('product.edit') }}" />
+
+                                <x-action icon="delete" :label="__('common.delete')" tone="danger"
+                                          data-modal-delete
+                                          data-url="{{ route('products.destroy', $product) }}"
+                                          data-message="{{ __('product.delete_confirm') }}" />
                             @endcan
                         </td>
                     </tr>

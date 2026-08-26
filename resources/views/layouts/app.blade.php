@@ -64,6 +64,13 @@
 
 <div id="toasts" class="fixed bottom-4 end-4 z-50"></div>
 
+<x-modal />
+
+<script>
+    // Messages the scripts need but cannot translate themselves.
+    window.__messages = @json(['error' => __('app.error'), 'loading' => __('app.loading')]);
+</script>
+
 @if (session('status'))
     <div data-flash="success" data-message="{{ session('status') }}" class="hidden"></div>
 @endif

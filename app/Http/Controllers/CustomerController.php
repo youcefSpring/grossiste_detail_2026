@@ -19,7 +19,7 @@ class CustomerController extends Controller
             ->search($request->input('q'))
             ->when($request->input('status') === 'debt', fn ($q) => $q->where('balance', '>', 0))
             ->orderBy('name')
-            ->paginate(25)
+            ->paginate(per_page())
             ->withQueryString();
 
         return view('customers.index', [
@@ -42,9 +42,10 @@ class CustomerController extends Controller
             return redirect()->route('sales.create')->with('status', __('customer.created', ['name' => $customer->name]));
         }
 
-        return redirect()
-            ->route('customers.show', $customer)
-            ->with('status', __('customer.created', ['name' => $customer->name]));
+        return $this->done(
+            __('customer.created', ['name' => $customer->name]),
+            route('customers.show', $customer),
+        );
     }
 
     public function show(Customer $customer)
@@ -65,9 +66,10 @@ class CustomerController extends Controller
     {
         $customer->update($request->customerData());
 
-        return redirect()
-            ->route('customers.show', $customer)
-            ->with('status', __('customer.updated', ['name' => $customer->name]));
+        return $this->done(
+            __('customer.updated', ['name' => $customer->name]),
+            route('customers.show', $customer),
+        );
     }
 
     /** Customer hands over money against their debt. */
@@ -90,8 +92,9 @@ class CustomerController extends Controller
             $data['note'] ?? null,
         );
 
-        return redirect()
-            ->route('customers.show', $customer)
-            ->with('status', __('customer.collected', ['amount' => $data['amount']]));
+        return $this->done(
+            __('customer.collected', ['amount' => $data['amount']]),
+            route('customers.show', $customer),
+        );
     }
 }

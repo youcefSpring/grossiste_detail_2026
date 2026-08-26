@@ -19,13 +19,18 @@ class PurchaseService
     /**
      * Record a purchase: stock in, supplier balance, payment — all or nothing.
      *
-     * @param  array{supplier_id:int, purchased_at:string, discount_amount:int, paid_amount:int,
+     * The supplier is optional: a cash purchase from someone with no account
+     * carries no balance, the same way a walk-in sale carries no customer.
+     *
+     * @param  array{supplier_id:?int, purchased_at:string, discount_amount:int, paid_amount:int,
      *               method:string, note:?string, items:array<array{product_id:int, quantity:float, unit_cost:int}>}  $data
      */
     public function create(array $data): Purchase
     {
         return DB::transaction(function () use ($data) {
-            $supplier = Supplier::lockForUpdate()->findOrFail($data['supplier_id']);
+            $supplier = $data['supplier_id']
+                ? Supplier::lockForUpdate()->findOrFail($data['supplier_id'])
+                : null;
             $warehouse = Warehouse::default();
 
             $lines = $this->buildLines($data['items']);
@@ -36,7 +41,7 @@ class PurchaseService
 
             $purchase = Purchase::create([
                 'reference' => Sequence::next('ACH'),
-                'supplier_id' => $supplier->id,
+                'supplier_id' => $supplier?->id,
                 'user_id' => auth()->id(),
                 'warehouse_id' => $warehouse->id,
                 'subtotal' => $subtotal,
@@ -67,8 +72,9 @@ class PurchaseService
                 $product->update(['cost_price' => $line['unit_cost']]);
             }
 
-            // What we still owe them rides on the supplier balance.
-            $supplier->increment('balance', $total - $paid);
+            // What we still owe them rides on the supplier balance. With no
+            // supplier the purchase was paid in full, so there is nothing to carry.
+            $supplier?->increment('balance', $total - $paid);
 
             if ($paid > 0) {
                 $this->payments->against($supplier, $paid, $data['method'] ?? 'cash', $purchase);

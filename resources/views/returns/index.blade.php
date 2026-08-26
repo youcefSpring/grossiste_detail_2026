@@ -52,7 +52,7 @@
                         <div class="font-medium tabular-nums">{{ $item->reference }}</div>
                         <div class="text-xs text-slate-400">
                             <span class="tabular-nums">{{ $item->purchase->reference }}</span>
-                            · {{ $item->supplier->name }}
+                            · {{ $item->supplier?->name ?? '/' }}
                             · {{ $item->returned_at->format('Y-m-d') }}
                         </div>
                     </div>

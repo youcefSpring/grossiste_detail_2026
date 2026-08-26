@@ -17,10 +17,13 @@ import $ from 'jquery'
  *     ...anything else...              replaced
  *   </div>
  */
+const ROOT = '[data-live-root]'
+
 export function liveSearch() {
-    const ROOT = '[data-live-root]'
     let inFlight = null
     let timer
+
+    window.liveRefresh = (url = window.location.href) => swap(url)
 
     function swap(url) {
         const $root = $(ROOT).first()

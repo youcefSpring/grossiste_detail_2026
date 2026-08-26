@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'search_hint' => 'Nom, e-mail ou téléphone',
+    'none' => 'Aucun utilisateur.',
     'add' => 'Ajouter un utilisateur',
     'edit' => 'Modifier l\'utilisateur',
     'last_login' => 'Dernière connexion :',

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends(modal_layout())
 @section('title', $supplier->exists ? __('supplier.edit') : __('supplier.add'))
 
 @section('content')
@@ -77,7 +77,7 @@
 
             <div class="bg-white rounded-2xl shadow-sm p-5 space-y-2">
                 <button class="w-full rounded-lg bg-emerald-600 text-white py-3 font-medium">{{ __('app.save') }}</button>
-                <a href="{{ route('suppliers.index') }}"
+                <a href="{{ route('suppliers.index') }}" data-modal-close
                    class="block text-center rounded-lg border py-3">{{ __('app.cancel') }}</a>
             </div>
         </div>

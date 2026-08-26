@@ -17,7 +17,7 @@
             <div>
                 <div class="font-semibold tabular-nums">{{ $purchase->reference }}</div>
                 <div class="text-sm text-slate-500">
-                    {{ $purchase->supplier->name }} · {{ $purchase->purchased_at->format('Y-m-d') }}
+                    {{ $purchase->supplier?->name ?? '/' }} · {{ $purchase->purchased_at->format('Y-m-d') }}
                 </div>
             </div>
             <div class="tabular-nums font-medium">{{ money($purchase->total) }} {{ settings('currency.symbol') }}</div>

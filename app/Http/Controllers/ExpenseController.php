@@ -21,7 +21,7 @@ class ExpenseController extends Controller
                 fn ($q) => $q->where('expense_category_id', $request->input('expense_category_id')));
 
         return view('expenses.index', [
-            'expenses' => $query->clone()->latest('spent_at')->latest('id')->paginate(25)->withQueryString(),
+            'expenses' => $query->clone()->latest('spent_at')->latest('id')->paginate(per_page())->withQueryString(),
             'total' => (int) $query->clone()->sum('amount'),
             'categories' => ExpenseCategory::orderBy('name')->get(),
             'from' => $from,
@@ -48,9 +48,7 @@ class ExpenseController extends Controller
 
         Expense::create($data);
 
-        return redirect()
-            ->route('expenses.index')
-            ->with('status', __('expense.created'));
+        return $this->done(__('expense.created'), route('expenses.index'));
     }
 
     public function edit(Expense $expense)
@@ -71,17 +69,13 @@ class ExpenseController extends Controller
 
         $expense->update($data);
 
-        return redirect()
-            ->route('expenses.index')
-            ->with('status', __('expense.updated'));
+        return $this->done(__('expense.updated'), route('expenses.index'));
     }
 
     public function destroy(Expense $expense)
     {
         $expense->delete();
 
-        return redirect()
-            ->route('expenses.index')
-            ->with('status', __('expense.deleted'));
+        return $this->done(__('expense.deleted'), route('expenses.index'));
     }
 }

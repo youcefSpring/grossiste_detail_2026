@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'no_supplier' => 'Sans fournisseur (achat comptant)',
+    'supplier_needed_for_credit' => 'Choisissez un fournisseur, ou payez l\'achat en entier : sans compte, le reste ne peut pas être suivi.',
     'new' => 'Nouvel achat',
     'none' => 'Aucun achat.',
     'confirm' => 'Valider l\'achat',

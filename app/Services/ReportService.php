@@ -89,14 +89,15 @@ class ReportService
         return Purchase::query()
             ->selectRaw('suppliers.name as supplier, count(*) as purchases_count,
                          sum(purchases.total) as total, sum(purchases.due_amount) as due')
-            ->join('suppliers', 'suppliers.id', '=', 'purchases.supplier_id')
+            // Left join: a cash purchase with no supplier still belongs in the total.
+            ->leftJoin('suppliers', 'suppliers.id', '=', 'purchases.supplier_id')
             ->where('purchases.status', '!=', 'voided')
             ->whereBetween('purchases.purchased_at', [$from->toDateString(), $to->toDateString()])
             ->groupBy('suppliers.name')
             ->orderByDesc('total')
             ->get()
             ->map(fn ($row) => (object) [
-                'supplier' => $row->supplier,
+                'supplier' => $row->supplier ?? '/',
                 'purchases_count' => (int) $row->purchases_count,
                 'total' => (int) $row->total,
                 'due' => (int) $row->due,

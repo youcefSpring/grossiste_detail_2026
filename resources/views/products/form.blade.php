@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends(modal_layout())
 @section('title', $product->exists ? __('product.edit') : __('product.add'))
 
 @section('content')
@@ -150,7 +150,7 @@
 
             <div class="bg-white rounded-2xl shadow-sm p-5 space-y-2">
                 <button class="w-full rounded-lg bg-emerald-600 text-white py-3 font-medium">{{ __('app.save') }}</button>
-                <a href="{{ route('products.index') }}"
+                <a href="{{ route('products.index') }}" data-modal-close
                    class="block text-center rounded-lg border py-3">{{ __('app.cancel') }}</a>
 
                 @if ($product->exists)

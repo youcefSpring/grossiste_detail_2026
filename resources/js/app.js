@@ -1,6 +1,7 @@
 import $ from 'jquery'
 import axios from 'axios'
 import { liveSearch } from './live-search'
+import { askConfirm, modals } from './modal'
 import { bumpExisting, money, productSearch } from './product-search'
 
 window.$ = window.jQuery = $
@@ -81,15 +82,28 @@ $(function () {
         window.toast($(this).data('message'), $(this).data('flash'))
     })
 
-    // Confirm before destructive actions
-    $(document).on('click', '[data-confirm]', function (e) {
-        if (!window.confirm($(this).data('confirm'))) e.preventDefault()
+    // Confirm before destructive actions, in the app's own dialog.
+    $(document).on('click', '[data-confirm]', function (event) {
+        const element = this
+
+        if ($(element).data('confirmed')) return
+
+        event.preventDefault()
+
+        askConfirm($(element).data('confirm'), () => {
+            $(element).data('confirmed', true)
+            element.click()
+            $(element).removeData('confirmed')
+        })
     })
 
     /* ---- Loading feedback ---- */
 
     // Any submitted form: disable the button, show a spinner, run the progress bar.
     $(document).on('submit', 'form', function () {
+        // Modal forms are submitted over AJAX; modal.js owns their feedback.
+        if ($(this).closest('#modal-body').length) return
+
         const $button = $(this).find('button[type=submit], button:not([type])').first()
 
         if ($button.length && !$button.data('no-spinner')) {
@@ -113,4 +127,7 @@ $(function () {
 
     // Filters on the list screens apply as you type.
     liveSearch()
+
+    // Create/edit forms open in a dialog instead of their own page.
+    modals()
 })

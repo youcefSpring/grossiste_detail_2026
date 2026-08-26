@@ -24,31 +24,41 @@
 
         <button class="rounded-lg bg-slate-900 text-white px-5 py-2.5">{{ __('app.search') }}</button>
 
+        @include('partials.per-page')
+
         @can('supplier.manage')
-            <a href="{{ route('suppliers.create') }}"
+            <a href="{{ route('suppliers.create') }}" data-modal data-modal-title="{{ __('supplier.add') }}"
                class="rounded-lg bg-emerald-600 text-white px-5 py-2.5 ms-auto">+ {{ __('supplier.add') }}</a>
         @endcan
     </form>
 
     <div class="space-y-2">
         @forelse ($suppliers as $supplier)
-            <a href="{{ route('suppliers.show', $supplier) }}"
-               class="flex items-center justify-between gap-3 bg-white rounded-2xl shadow-sm p-4 hover:bg-slate-50">
-                <div class="min-w-0">
-                    <div class="font-medium truncate">{{ $supplier->name }}</div>
-                    <div class="text-sm text-slate-500">
-                        {{ $supplier->phone ?: $supplier->company ?: '/' }}
+            <div class="relative group">
+                <a href="{{ route('suppliers.show', $supplier) }}"
+                   class="flex items-center justify-between gap-3 bg-white rounded-2xl shadow-sm p-4 hover:bg-slate-50">
+                    <div class="min-w-0">
+                        <div class="font-medium truncate">{{ $supplier->name }}</div>
+                        <div class="text-sm text-slate-500">
+                            {{ $supplier->phone ?: $supplier->company ?: '/' }}
+                        </div>
                     </div>
-                </div>
-                <div class="text-end whitespace-nowrap">
-                    @if ($supplier->balance > 0)
-                        <div class="font-semibold tabular-nums text-amber-700">{{ money($supplier->balance) }}</div>
-                        <div class="text-xs text-slate-400">{{ __('supplier.we_owe') }}</div>
-                    @else
-                        <span class="text-sm text-emerald-600">{{ __('supplier.settled') }}</span>
-                    @endif
-                </div>
-            </a>
+                    <div class="text-end whitespace-nowrap">
+                        @if ($supplier->balance > 0)
+                            <div class="font-semibold tabular-nums text-amber-700">{{ money($supplier->balance) }}</div>
+                            <div class="text-xs text-slate-400">{{ __('supplier.we_owe') }}</div>
+                        @else
+                            <span class="text-sm text-emerald-600">{{ __('supplier.settled') }}</span>
+                        @endif
+                    </div>
+                </a>
+
+                @can('supplier.manage')
+                    <x-action icon="edit" :label="__('common.edit')" :href="route('suppliers.edit', $supplier)"
+                              data-modal data-modal-title="{{ __('supplier.edit') }}"
+                              class="absolute top-2 end-2 opacity-0 group-hover:opacity-100 focus:opacity-100 bg-white/80" />
+                @endcan
+            </div>
         @empty
             <div class="bg-white rounded-2xl p-10 text-center text-slate-500">{{ __('supplier.none') }}</div>
         @endforelse

@@ -14,9 +14,9 @@
     {{-- Step 1: who and when --}}
     <div class="bg-white rounded-2xl shadow-sm p-4 grid gap-4 sm:grid-cols-2">
         <label class="block space-y-1">
-            <span class="text-sm font-medium">{{ __('purchase.fields.supplier_id') }} <span class="text-red-500">*</span></span>
-            <select name="supplier_id" required class="w-full rounded-lg border-slate-300 py-2.5">
-                <option value="">—</option>
+            <span class="text-sm font-medium">{{ __('purchase.fields.supplier_id') }}</span>
+            <select name="supplier_id" class="w-full rounded-lg border-slate-300 py-2.5">
+                <option value="">{{ __('purchase.no_supplier') }}</option>
                 @foreach ($suppliers as $supplier)
                     <option value="{{ $supplier->id }}" @selected(old('supplier_id') == $supplier->id)>{{ $supplier->name }}</option>
                 @endforeach

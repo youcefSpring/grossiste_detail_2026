@@ -19,7 +19,7 @@ class SupplierController extends Controller
             ->search($request->input('q'))
             ->when($request->input('status') === 'debt', fn ($q) => $q->where('balance', '>', 0))
             ->orderBy('name')
-            ->paginate(25)
+            ->paginate(per_page())
             ->withQueryString();
 
         return view('suppliers.index', [
@@ -37,9 +37,10 @@ class SupplierController extends Controller
     {
         $supplier = Supplier::create($request->validated());
 
-        return redirect()
-            ->route('suppliers.show', $supplier)
-            ->with('status', __('supplier.created', ['name' => $supplier->name]));
+        return $this->done(
+            __('supplier.created', ['name' => $supplier->name]),
+            route('suppliers.show', $supplier),
+        );
     }
 
     /** Account statement: what they supplied, what we paid, what is left. */
@@ -61,9 +62,10 @@ class SupplierController extends Controller
     {
         $supplier->update($request->validated());
 
-        return redirect()
-            ->route('suppliers.show', $supplier)
-            ->with('status', __('supplier.updated', ['name' => $supplier->name]));
+        return $this->done(
+            __('supplier.updated', ['name' => $supplier->name]),
+            route('suppliers.show', $supplier),
+        );
     }
 
     /** Hand the supplier money against the running balance. */
@@ -86,8 +88,9 @@ class SupplierController extends Controller
             $data['note'] ?? null,
         );
 
-        return redirect()
-            ->route('suppliers.show', $supplier)
-            ->with('status', __('supplier.paid', ['amount' => $data['amount']]));
+        return $this->done(
+            __('supplier.paid', ['amount' => $data['amount']]),
+            route('suppliers.show', $supplier),
+        );
     }
 }

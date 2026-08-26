@@ -2,19 +2,25 @@
 @section('title', __('nav.users'))
 
 @section('content')
-<div class="space-y-4">
+<div class="space-y-4" data-live-root>
     @if ($errors->any())
         <div class="rounded-xl bg-red-50 text-red-700 text-sm p-4">{{ $errors->first() }}</div>
     @endif
 
-    <div class="flex">
-        <a href="{{ route('users.create') }}" class="rounded-lg bg-emerald-600 text-white px-5 py-2.5 ms-auto">
-            + {{ __('user.add') }}
-        </a>
-    </div>
+    <form method="GET" data-live class="bg-white rounded-2xl shadow-sm p-3 flex flex-wrap gap-2 items-center">
+        <input type="search" name="q" value="{{ request('q') }}" placeholder="{{ __('user.search_hint') }}"
+               class="flex-1 min-w-48 rounded-lg border-slate-300 px-3 py-2.5">
+
+        <button class="rounded-lg bg-slate-900 text-white px-5 py-2.5">{{ __('app.search') }}</button>
+
+        @include('partials.per-page')
+
+        <a href="{{ route('users.create') }}" data-modal data-modal-title="{{ __('user.add') }}"
+           class="rounded-lg bg-emerald-600 text-white px-5 py-2.5 ms-auto">+ {{ __('user.add') }}</a>
+    </form>
 
     <div class="space-y-2">
-        @foreach ($users as $user)
+        @forelse ($users as $user)
             <div class="bg-white rounded-2xl shadow-sm p-4 flex flex-wrap items-center justify-between gap-3
                         {{ $user->is_active ? '' : 'opacity-50' }}">
                 <div class="min-w-0">
@@ -35,7 +41,8 @@
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <x-action icon="edit" :label="__('common.edit')" :href="route('users.edit', $user)" />
+                    <x-action icon="edit" :label="__('common.edit')" :href="route('users.edit', $user)"
+                              data-modal data-modal-title="{{ __('user.edit') }}" />
 
                     @unless ($user->is(auth()->user()))
                         <form method="POST" action="{{ route('users.toggle', $user) }}">
@@ -49,7 +56,9 @@
                     @endunless
                 </div>
             </div>
-        @endforeach
+        @empty
+            <div class="bg-white rounded-2xl p-10 text-center text-slate-500">{{ __('user.none') }}</div>
+        @endforelse
     </div>
 
     {{ $users->links() }}
