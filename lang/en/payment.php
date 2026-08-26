@@ -10,5 +10,6 @@ return [
         'transfer' => 'Bank transfer',
         'cheque' => 'Cheque',
         'card' => 'Card',
+        'exchange' => 'Exchange',
     ],
 ];

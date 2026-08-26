@@ -10,5 +10,6 @@ return [
         'transfer' => 'تحويل بنكي',
         'cheque' => 'شيك',
         'card' => 'بطاقة',
+        'exchange' => 'مقايضة',
     ],
 ];

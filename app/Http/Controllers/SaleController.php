@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Sale;
 use App\Services\PdfService;
 use App\Services\SaleService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class SaleController extends Controller
@@ -47,20 +48,27 @@ class SaleController extends Controller
      */
     private function quickPicks(int $limit = 12)
     {
-        $bestSellers = Product::query()
-            ->where('products.is_active', true)
-            ->where('products.stock', '>', 0)
-            ->join('sale_items', 'sale_items.product_id', '=', 'products.id')
+        // Rank ids first: selecting products.* alongside GROUP BY products.id
+        // trips ONLY_FULL_GROUP_BY on MySQL.
+        $bestSellerIds = DB::table('sale_items')
             ->join('sales', function ($join) {
                 $join->on('sales.id', '=', 'sale_items.sale_id')
                     ->where('sales.status', '!=', 'voided')
                     ->where('sales.sold_at', '>=', now()->subDays(30));
             })
-            ->groupBy('products.id')
+            ->join('products', 'products.id', '=', 'sale_items.product_id')
+            ->where('products.is_active', true)
+            ->where('products.stock', '>', 0)
+            ->whereNull('products.deleted_at')
+            ->groupBy('sale_items.product_id')
             ->orderByRaw('sum(sale_items.quantity) desc')
-            ->select('products.*')
             ->limit($limit)
-            ->get();
+            ->pluck('sale_items.product_id');
+
+        $bestSellers = Product::whereIn('id', $bestSellerIds)
+            ->get()
+            ->sortBy(fn ($product) => $bestSellerIds->search($product->id))
+            ->values();
 
         if ($bestSellers->count() >= $limit) {
             return $bestSellers;
