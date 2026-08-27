@@ -12,4 +12,5 @@ return [
     'per_page' => 'Lignes',
     'error' => 'Une erreur est survenue. Réessayez.',
     'logout' => 'Déconnexion',
+    'language' => 'Langue',
 ];

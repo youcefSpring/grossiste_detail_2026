@@ -12,4 +12,5 @@ return [
     'per_page' => 'Rows',
     'error' => 'Something went wrong. Please try again.',
     'logout' => 'Log out',
+    'language' => 'Language',
 ];

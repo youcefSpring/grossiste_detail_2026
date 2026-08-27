@@ -38,23 +38,25 @@
 
             {{-- Right-hand controls. On a phone they are icons: the label text
                  would eat the whole bar. --}}
-            {{-- Language: a globe and the current code. The full names live in
-                 the menu, where a phone has room for them. --}}
+            {{-- Language: the flag is the label. Three languages, no text needed
+                 until the menu is open. --}}
+            @php($flags = ['ar' => ['🇩🇿', 'العربية'], 'fr' => ['🇫🇷', 'Français'], 'en' => ['🇬🇧', 'English']])
+
             <form id="locale-form" method="POST" action="{{ route('locale') }}" class="shrink-0">
                 @csrf
                 <details id="locale-menu" class="relative">
-                    <summary class="list-none cursor-pointer select-none flex items-center gap-1 rounded-lg p-2 hover:bg-slate-100">
-                        <x-icon name="globe" class="w-5 h-5 text-slate-500" />
-                        <span class="text-xs font-semibold uppercase text-slate-600">{{ app()->getLocale() }}</span>
+                    <summary class="list-none cursor-pointer select-none rounded-lg px-2 py-1.5 text-xl leading-none hover:bg-slate-100"
+                             aria-label="{{ __('app.language') }}" title="{{ __('app.language') }}">
+                        {{ $flags[app()->getLocale()][0] ?? '🌐' }}
                     </summary>
 
-                    <div class="absolute end-0 z-30 mt-2 w-40 overflow-hidden rounded-xl border bg-white shadow-lg">
-                        @foreach (['ar' => 'العربية', 'fr' => 'Français', 'en' => 'English'] as $code => $label)
+                    <div class="absolute end-0 z-30 mt-2 w-44 overflow-hidden rounded-xl border bg-white shadow-lg">
+                        @foreach ($flags as $code => [$flag, $label])
                             <button type="submit" name="locale" value="{{ $code }}"
-                                    class="flex w-full items-center justify-between px-4 py-2.5 text-start text-sm hover:bg-slate-50
-                                           {{ app()->getLocale() === $code ? 'font-semibold text-emerald-700' : 'text-slate-700' }}">
+                                    class="flex w-full items-center gap-3 px-4 py-3 text-start text-sm hover:bg-slate-50
+                                           {{ app()->getLocale() === $code ? 'bg-emerald-50 font-semibold text-emerald-800' : 'text-slate-700' }}">
+                                <span class="text-lg leading-none">{{ $flag }}</span>
                                 {{ $label }}
-                                <span class="text-xs uppercase text-slate-400">{{ $code }}</span>
                             </button>
                         @endforeach
                     </div>
@@ -65,12 +67,10 @@
 
             <span class="text-sm text-slate-600 hidden md:inline truncate max-w-40">{{ auth()->user()->name }}</span>
 
-            <form method="POST" action="{{ route('logout') }}" class="shrink-0">
+            {{-- One control at every width: the power mark ends the session. --}}
+            <form id="logout-form" method="POST" action="{{ route('logout') }}" class="shrink-0">
                 @csrf
-                <button class="text-sm text-red-600 hover:underline hidden sm:inline">{{ __('app.logout') }}</button>
-                <button class="sm:hidden p-2 text-red-600" aria-label="{{ __('app.logout') }}">
-                    <x-icon name="logout" class="w-5 h-5 rtl:-scale-x-100" />
-                </button>
+                <x-action icon="logout" :label="__('app.logout')" tone="danger" form="logout-form" />
             </form>
         </header>
 
