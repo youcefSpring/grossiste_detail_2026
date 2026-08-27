@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SaleRequest;
 use App\Models\Customer;
 use App\Models\Product;
+use App\Models\Payment;
 use App\Models\Sale;
 use App\Services\PdfService;
 use App\Services\SaleService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class SaleController extends Controller
 {
@@ -115,6 +117,31 @@ class SaleController extends Controller
         }
 
         return view('sales.invoice', compact('sale'));
+    }
+
+    /** Money paid later against an invoice left on credit. */
+    public function pay(Request $request, Sale $sale)
+    {
+        abort_unless($request->user()->can('payment.record'), 403);
+
+        $data = $request->validate([
+            'amount' => ['required', 'numeric', 'gt:0', 'max:99999999'],
+            'method' => ['required', Rule::in(Payment::METHODS)],
+            'paid_at' => ['required', 'date', 'before_or_equal:today'],
+            'note' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $this->sales->pay(
+            $sale,
+            centimes($data['amount']),
+            $data['method'],
+            $data['paid_at'],
+            $data['note'] ?? null,
+        );
+
+        return redirect()
+            ->route('sales.show', $sale)
+            ->with('status', __('sale.payment_recorded', ['amount' => $data['amount']]));
     }
 
     public function void(Request $request, Sale $sale)

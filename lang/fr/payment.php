@@ -12,4 +12,5 @@ return [
         'card' => 'Carte',
         'exchange' => 'Échange',
     ],
+    'note' => 'Note',
 ];

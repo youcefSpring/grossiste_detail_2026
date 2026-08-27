@@ -93,6 +93,45 @@ class SaleService
         });
     }
 
+    /**
+     * A customer settles part of an invoice they left unpaid.
+     *
+     * The money is recorded against the invoice, the invoice's balance drops,
+     * and so does the customer's running debt — the same debt this sale added
+     * when it was rung up on credit.
+     */
+    public function pay(Sale $sale, int $amount, string $method, string $paidAt, ?string $note = null): Sale
+    {
+        return DB::transaction(function () use ($sale, $amount, $method, $paidAt, $note) {
+            $sale = Sale::lockForUpdate()->find($sale->id);
+
+            if ($sale->isVoided()) {
+                throw ValidationException::withMessages(['amount' => __('sale.already_voided')]);
+            }
+
+            if ($amount > $sale->due_amount) {
+                throw ValidationException::withMessages([
+                    'amount' => __('sale.payment_over_due', ['due' => money($sale->due_amount)]),
+                ]);
+            }
+
+            $sale->update([
+                'paid_amount' => $sale->paid_amount + $amount,
+                'due_amount' => $sale->due_amount - $amount,
+            ]);
+
+            $customer = $sale->customer_id
+                ? Customer::whereKey($sale->customer_id)->lockForUpdate()->first()
+                : null;
+
+            $customer?->decrement('balance', $amount);
+
+            $this->payments->against($customer, $amount, $method, $sale, $note, $paidAt);
+
+            return $sale->fresh();
+        });
+    }
+
     /** Cancel a sale: stock back, debt back, trail kept. Never deleted. */
     public function void(Sale $sale, string $reason): Sale
     {

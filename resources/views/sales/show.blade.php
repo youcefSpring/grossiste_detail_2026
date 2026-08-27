@@ -84,6 +84,86 @@
         </div>
     </div>
 
+    {{-- Money paid against this invoice, and what is still owed on it. --}}
+    @if ($sale->payments->isNotEmpty() || ($sale->due_amount > 0 && ! $sale->isVoided()))
+        <div class="bg-white rounded-2xl shadow-sm p-5 space-y-4">
+            <h2 class="font-medium">{{ __('sale.payments') }}</h2>
+
+            @if ($sale->payments->isNotEmpty())
+                <div class="table-card table-scroll">
+                    <table class="table table-stack md:min-w-[420px]">
+                        <thead>
+                            <tr>
+                                <th>{{ __('payment.date') }}</th>
+                                <th>{{ __('purchase.fields.method') }}</th>
+                                <th class="num">{{ __('supplier.fields.amount') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($sale->payments->sortBy('paid_at') as $payment)
+                                <tr>
+                                    <td class="tabular-nums">{{ $payment->paid_at->format('Y-m-d') }}</td>
+                                    <td data-label="{{ __('purchase.fields.method') }}">
+                                        {{ __('payment.methods.'.$payment->method) }}
+                                        @if ($payment->note)
+                                            <span class="block text-xs text-slate-400">{{ $payment->note }}</span>
+                                        @endif
+                                    </td>
+                                    <td class="num font-medium" data-label="{{ __('supplier.fields.amount') }}">
+                                        <bdi>{{ money($payment->amount) }}</bdi>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
+
+            @can('payment.record')
+                @if ($sale->due_amount > 0 && ! $sale->isVoided())
+                    <form method="POST" action="{{ route('sales.pay', $sale) }}" class="space-y-3">
+                        @csrf
+
+                        <div class="grid gap-3 sm:grid-cols-3">
+                            <label class="block space-y-1">
+                                <span class="text-sm text-slate-600">{{ __('supplier.fields.amount') }}</span>
+                                <input name="amount" type="number" step="0.01" min="0.01" required
+                                       max="{{ number_format($sale->due_amount / 100, 2, '.', '') }}"
+                                       value="{{ number_format($sale->due_amount / 100, 2, '.', '') }}"
+                                       class="w-full rounded-lg border-slate-300 px-3 py-2.5 tabular-nums text-lg">
+                            </label>
+
+                            <label class="block space-y-1">
+                                <span class="text-sm text-slate-600">{{ __('purchase.fields.method') }}</span>
+                                <select name="method" class="w-full rounded-lg border-slate-300 py-2.5">
+                                    @foreach (settings('payment.methods', ['cash']) as $method)
+                                        <option value="{{ $method }}">{{ __('payment.methods.'.$method) }}</option>
+                                    @endforeach
+                                </select>
+                            </label>
+
+                            <label class="block space-y-1">
+                                <span class="text-sm text-slate-600">{{ __('payment.date') }}</span>
+                                <input type="date" name="paid_at" required value="{{ now()->toDateString() }}"
+                                       max="{{ now()->toDateString() }}"
+                                       class="w-full rounded-lg border-slate-300 px-3 py-2.5">
+                            </label>
+                        </div>
+
+                        <label class="block space-y-1">
+                            <span class="text-sm text-slate-600">{{ __('payment.note') }}</span>
+                            <input name="note" maxlength="255" class="w-full rounded-lg border-slate-300 px-3 py-2.5">
+                        </label>
+
+                        <button class="rounded-lg bg-emerald-600 text-white px-6 py-3 font-medium">
+                            {{ __('sale.record_payment') }}
+                        </button>
+                    </form>
+                @endif
+            @endcan
+        </div>
+    @endif
+
     <div class="flex flex-wrap items-center gap-1 bg-white rounded-2xl shadow-sm p-2">
         <x-action icon="print" :label="__('sale.print')"
                   :href="route('sales.invoice', $sale)" target="_blank" />

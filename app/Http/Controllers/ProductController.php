@@ -121,6 +121,7 @@ class ProductController extends Controller
                 'barcode' => $p->barcode,
                 'sku' => $p->sku,
                 'unit' => __('product.units.'.$p->unit),
+                'quantity_step' => $p->quantityStep(),
                 'stock' => (float) $p->stock,
                 'retail_price' => money($p->retail_price),
                 // Raw decimals feed number inputs; the formatted ones are for display.

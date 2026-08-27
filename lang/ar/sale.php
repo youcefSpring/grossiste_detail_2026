@@ -43,4 +43,8 @@ return [
         'discount_amount' => 'تخفيض',
         'paid_amount' => 'المبلغ المدفوع',
     ],
+    'payments' => 'الدفعات',
+    'record_payment' => 'تسجيل دفعة',
+    'payment_recorded' => 'تم تسجيل دفعة :amount.',
+    'payment_over_due' => 'المبلغ أكبر من الباقي (:due).',
 ];

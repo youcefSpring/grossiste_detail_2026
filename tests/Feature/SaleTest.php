@@ -97,6 +97,79 @@ class SaleTest extends TestCase
         $this->assertSame(1, Payment::count());
     }
 
+    public function test_a_later_payment_clears_part_of_an_unpaid_invoice(): void
+    {
+        $this->actingAsRole('manager');
+        $product = $this->product();
+        $customer = Customer::create(['name' => 'Ahmed']);
+
+        $this->post(route('sales.store'), $this->payload($product, [
+            'customer_id' => $customer->id,
+            'paid_amount' => 100,
+        ]));
+
+        $sale = Sale::sole();
+
+        $this->post(route('sales.pay', $sale), [
+            'amount' => 120,
+            'method' => 'cash',
+            'paid_at' => now()->toDateString(),
+            'note' => 'Versement partiel',
+        ])->assertRedirect(route('sales.show', $sale));
+
+        $sale->refresh();
+
+        $this->assertSame(22000, (int) $sale->paid_amount);   // 100,00 + 120,00
+        $this->assertSame(8000, (int) $sale->due_amount);
+        $this->assertSame(8000, (int) $customer->fresh()->balance);
+
+        $payment = Payment::latest('id')->first();
+        $this->assertSame(12000, (int) $payment->amount);
+        $this->assertSame(Sale::class, $payment->payable_type);
+        $this->assertSame($sale->id, (int) $payment->payable_id);
+    }
+
+    public function test_a_payment_larger_than_the_balance_is_refused(): void
+    {
+        $this->actingAsRole('manager');
+        $product = $this->product();
+        $customer = Customer::create(['name' => 'Ahmed']);
+
+        $this->post(route('sales.store'), $this->payload($product, [
+            'customer_id' => $customer->id,
+            'paid_amount' => 100,
+        ]));
+
+        $sale = Sale::sole();
+
+        $this->post(route('sales.pay', $sale), [
+            'amount' => 500,
+            'method' => 'cash',
+            'paid_at' => now()->toDateString(),
+        ])->assertSessionHasErrors('amount');
+
+        $this->assertSame(20000, (int) $sale->fresh()->due_amount);
+        $this->assertSame(20000, (int) $customer->fresh()->balance);
+    }
+
+    public function test_a_cashier_without_the_payment_right_cannot_settle_an_invoice(): void
+    {
+        $this->actingAsRole('warehouse');
+        $sale = Sale::create([
+            'invoice_number' => 'INV-1', 'user_id' => auth()->id(),
+            'warehouse_id' => Warehouse::default()->id,
+            'type' => 'retail', 'subtotal' => 10000, 'discount_amount' => 0, 'total' => 10000,
+            'cost_total' => 0, 'paid_amount' => 0, 'due_amount' => 10000,
+            'status' => 'completed', 'sold_at' => now(),
+        ]);
+
+        $this->post(route('sales.pay', $sale), [
+            'amount' => 50, 'method' => 'cash', 'paid_at' => now()->toDateString(),
+        ])->assertForbidden();
+
+        $this->assertSame(10000, (int) $sale->fresh()->due_amount);
+    }
+
     public function test_a_walk_in_sale_creates_no_debt_row(): void
     {
         $this->actingAsRole('sales');

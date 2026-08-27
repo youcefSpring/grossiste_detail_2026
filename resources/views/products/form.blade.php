@@ -65,7 +65,7 @@
             <div class="grid gap-4 sm:grid-cols-2">
                 <label class="block space-y-1">
                     <span class="text-sm font-medium">{{ __('product.fields.stock') }} <span class="text-red-500">*</span></span>
-                    <input name="stock" type="number" step="0.001" min="0" required
+                    <input name="stock" type="number" step="{{ $product->quantityStep() }}" min="0" required
                            value="{{ old('stock', $stock) }}"
                            class="w-full rounded-lg border-slate-300 px-3 py-2.5 tabular-nums">
                     @if ($product->exists)
@@ -75,7 +75,7 @@
 
                 <label class="block space-y-1">
                     <span class="text-sm font-medium">{{ __('product.fields.min_stock') }}</span>
-                    <input name="min_stock" type="number" step="0.001" min="0" required
+                    <input name="min_stock" type="number" step="{{ $product->quantityStep() }}" min="0" required
                            value="{{ old('min_stock', (float) $product->min_stock) }}"
                            class="w-full rounded-lg border-slate-300 px-3 py-2.5 tabular-nums">
                     <span class="text-xs text-slate-400">{{ __('product.min_stock_hint') }}</span>

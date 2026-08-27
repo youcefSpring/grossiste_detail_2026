@@ -97,7 +97,7 @@
             <input type="hidden" class="f-product">
         </td>
         <td class="w-24">
-            <input type="number" step="0.001" min="0.001" value="1"
+            <input type="number" step="1" min="0" value="1"
                    class="qty w-full rounded-lg border-slate-300 px-2 py-2 text-end tabular-nums">
         </td>
         <td class="w-28">
@@ -171,7 +171,9 @@ onAppReady(function () {
 
         $row.find('.name').text(product.name);
         $row.find('.f-product').attr('name', `new_items[${i}][product_id]`).val(product.id);
-        $row.find('.qty').attr('name', `new_items[${i}][quantity]`);
+        $row.find('.qty')
+            .attr('name', `new_items[${i}][quantity]`)
+            .attr('step', product.quantity_step || '0.001');
         $row.find('.price').attr('name', `new_items[${i}][unit_price]`).val(priceOf(product));
 
         $('#new-lines').append($row);

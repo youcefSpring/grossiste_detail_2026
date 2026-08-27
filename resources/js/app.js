@@ -70,11 +70,11 @@ $(function () {
         if (isDesktop()) closeDrawer()
     })
 
-    // Language switcher
-    $('#locale-switch').on('change', function () {
-        $('#locale-form input[name=locale]').val($(this).val())
-        window.pageLoading(true)
-        $('#locale-form').trigger('submit')
+    // Dropdowns in the header close when the click lands outside them.
+    $(document).on('click', function (event) {
+        $('header details[open]').each(function () {
+            if (!this.contains(event.target)) this.removeAttribute('open')
+        })
     })
 
     // Flash messages from the server

@@ -41,19 +41,25 @@ class DashboardController extends Controller
             $cards[] = ['key' => 'supplier_debts', 'value' => (int) Supplier::where('balance', '>', 0)->sum('balance')];
         }
 
-        $lowStock = Product::query()
-            ->where('is_active', true)
-            ->needingRestock()
-            ->orderBy('stock')
-            ->limit(8)
-            ->get();
+        // Both panels carry figures of their own — what we stock, who bought
+        // what for how much — so each needs the right that guards that screen.
+        $lowStock = $user->can('stock.view')
+            ? Product::query()
+                ->where('is_active', true)
+                ->needingRestock()
+                ->orderBy('stock')
+                ->limit(8)
+                ->get()
+            : collect();
 
-        $recentSales = Sale::with('customer:id,name')
-            ->where('status', 'completed')
-            ->latest('sold_at')
-            ->latest('id')
-            ->limit(8)
-            ->get();
+        $recentSales = $user->can('sale.view')
+            ? Sale::with('customer:id,name')
+                ->where('status', 'completed')
+                ->latest('sold_at')
+                ->latest('id')
+                ->limit(8)
+                ->get()
+            : collect();
 
         return view('dashboard', compact('cards', 'lowStock', 'recentSales'));
     }

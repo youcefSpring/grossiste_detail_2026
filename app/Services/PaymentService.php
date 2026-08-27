@@ -24,9 +24,9 @@ class PaymentService
      * A null party is a walk-in: cash in for a sale, cash out for a purchase,
      * with no account to track it against.
      */
-    public function against(?Model $party, int $amount, string $method, ?Model $payable = null, ?string $note = null): Payment
+    public function against(?Model $party, int $amount, string $method, ?Model $payable = null, ?string $note = null, ?string $paidAt = null): Payment
     {
-        return $this->write($party, $amount, $method, $payable, today()->toDateString(), $note);
+        return $this->write($party, $amount, $method, $payable, $paidAt ?? today()->toDateString(), $note);
     }
 
     /**

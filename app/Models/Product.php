@@ -16,6 +16,20 @@ class Product extends Model
     /** Units a shop actually uses. Kept as a plain list — no extra table. */
     public const UNITS = ['piece', 'kg', 'litre', 'metre', 'box', 'carton', 'pack'];
 
+    /** Units that only come in whole numbers. You cannot sell half a carton. */
+    public const WHOLE_UNITS = ['piece', 'box', 'carton', 'pack'];
+
+    /**
+     * What one press of the arrow key should add.
+     *
+     * Pieces step by one — that is how a till is used. Weighed and measured
+     * goods keep the fine step, because 1,250 kg is a real quantity.
+     */
+    public function quantityStep(): string
+    {
+        return in_array($this->unit, self::WHOLE_UNITS, true) ? '1' : '0.001';
+    }
+
     protected $fillable = [
         'name', 'category_id', 'barcode', 'sku', 'unit',
         'cost_price', 'retail_price', 'wholesale_price', 'min_price',

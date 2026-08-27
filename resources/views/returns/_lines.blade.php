@@ -23,7 +23,7 @@
                     <td class="num font-medium" data-label="{{ __('return.returnable') }}">{{ $left }}</td>
                     <td data-label="{{ __('return.returning') }}">
                         <input type="number" name="items[{{ $i }}][quantity]" class="qty w-full rounded-lg border-slate-300 px-2 py-2 text-end tabular-nums"
-                               step="0.001" min="0" max="{{ $left }}" value="0" {{ $left <= 0 ? 'disabled' : '' }}>
+                               step="{{ floor($left) == $left ? 1 : 0.001 }}" min="0" max="{{ $left }}" value="0" {{ $left <= 0 ? 'disabled' : '' }}>
                     </td>
                     <td data-label="{{ __('return.condition') }}">
                         <select name="items[{{ $i }}][condition]" class="w-full rounded-lg border-slate-300 py-2 ps-2 pe-8 text-sm">

@@ -106,7 +106,7 @@ class ReportController extends Controller
 
                 if (! $wroteHeader) {
                     fputcsv($handle, array_map(
-                        fn ($column) => __("report.columns.{$report}.{$column}"),
+                        fn ($column) => self::csvSafe(__("report.columns.{$report}.{$column}")),
                         array_keys($fields),
                     ), ';');
 
@@ -117,9 +117,11 @@ class ReportController extends Controller
 
                 foreach ($fields as $column => $value) {
                     // Counts are counts; only money columns get the centimes treatment.
-                    $line[] = is_int($value) && ! in_array($column, ReportService::COUNT_COLUMNS, true)
-                        ? money($value)
-                        : $value;
+                    $line[] = self::csvSafe(
+                        is_int($value) && ! in_array($column, ReportService::COUNT_COLUMNS, true)
+                            ? money($value)
+                            : $value,
+                    );
                 }
 
                 fputcsv($handle, $line, ';');
@@ -127,5 +129,21 @@ class ReportController extends Controller
 
             fclose($handle);
         }, $filename, ['Content-Type' => 'text/csv; charset=UTF-8']);
+    }
+
+    /**
+     * Defuse a spreadsheet formula.
+     *
+     * A product named "=cmd|'/c calc'!A1" is a formula to Excel, not a label:
+     * opening the export would run it. Prefixing with an apostrophe makes the
+     * cell text, which is what a report row always is.
+     */
+    private static function csvSafe(mixed $value): mixed
+    {
+        if (! is_string($value) || $value === '') {
+            return $value;
+        }
+
+        return str_contains("=+-@\t\r", $value[0]) ? "'".$value : $value;
     }
 }

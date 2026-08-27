@@ -97,6 +97,9 @@ Route::middleware('auth')->group(function () {
     Route::post('sales/{sale}/void', [SaleController::class, 'void'])
         ->middleware('can:sale.void')->name('sales.void');
 
+    Route::post('sales/{sale}/pay', [SaleController::class, 'pay'])
+        ->middleware('can:payment.record')->name('sales.pay');
+
     Route::middleware('can:customer.view')->group(function () {
         Route::get('customers', [CustomerController::class, 'index'])->name('customers.index');
         Route::get('customers/{customer}', [CustomerController::class, 'show'])

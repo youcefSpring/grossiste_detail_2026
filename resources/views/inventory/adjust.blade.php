@@ -21,7 +21,7 @@
 
         <label class="block space-y-1">
             <span class="text-sm font-medium">{{ __('stock.real_quantity') }} <span class="text-red-500">*</span></span>
-            <input name="quantity" type="number" step="0.001" min="0" required autofocus
+            <input name="quantity" type="number" step="{{ $product->quantityStep() }}" min="0" required autofocus
                    value="{{ old('quantity', $current) }}"
                    class="w-full rounded-lg border-slate-300 px-3 py-3 text-2xl tabular-nums text-center">
             <span class="text-xs text-slate-400">{{ __('stock.real_quantity_hint') }}</span>

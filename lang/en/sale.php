@@ -43,4 +43,8 @@ return [
         'discount_amount' => 'Discount',
         'paid_amount' => 'Amount paid',
     ],
+    'payments' => 'Payments',
+    'record_payment' => 'Record payment',
+    'payment_recorded' => ':amount recorded.',
+    'payment_over_due' => 'More than the amount still due (:due).',
 ];

@@ -29,6 +29,7 @@
                                     'id' => $product->id,
                                     'name' => $product->name,
                                     'stock' => (float) $product->stock,
+                                    'quantity_step' => $product->quantityStep(),
                                     'retail_price_raw' => number_format($product->retail_price / 100, 2, '.', ''),
                                     'wholesale_price_raw' => number_format($product->wholesale_price / 100, 2, '.', ''),
                                 ];
@@ -164,7 +165,7 @@
             <input type="hidden" class="f-product">
         </td>
         <td data-label="{{ __('sale.fields.quantity') }}">
-            <input type="number" step="0.001" min="0.001" value="1"
+            <input type="number" step="1" min="0" value="1"
                    class="qty w-full rounded-lg border-slate-300 px-2 py-2 text-end tabular-nums">
         </td>
         <td data-label="{{ __('sale.fields.unit_price') }}">
@@ -235,7 +236,9 @@ onAppReady(function () {
         $row.find('.name').text(product.name);
         $row.find('.stock').text(`${t.stock}: ${product.stock}`);
         $row.find('.f-product').attr('name', `items[${i}][product_id]`).val(product.id);
-        $row.find('.qty').attr('name', `items[${i}][quantity]`);
+        $row.find('.qty')
+            .attr('name', `items[${i}][quantity]`)
+            .attr('step', product.quantity_step || '0.001');
         $row.find('.price').attr('name', `items[${i}][unit_price]`).val(priceOf(product));
         $row.data('product', product);
 

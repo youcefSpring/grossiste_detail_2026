@@ -126,7 +126,7 @@
             <input type="hidden" class="f-product">
         </td>
         <td class="p-2" data-label="{{ __('purchase.fields.quantity') }}">
-            <input type="number" step="0.001" min="0.001" value="1"
+            <input type="number" step="1" min="0" value="1"
                    class="qty w-full rounded-lg border-slate-300 px-2 py-2 text-end tabular-nums">
         </td>
         <td class="p-2" data-label="{{ __('purchase.fields.unit_cost') }}">
@@ -179,7 +179,7 @@ onAppReady(function () {
 
         $row.find('.name').text(product.name);
         $row.find('.f-product').attr('name', `items[${i}][product_id]`).val(product.id);
-        $row.find('.qty').attr('name', `items[${i}][quantity]`);
+        $row.find('.qty').attr('step', product.quantity_step || '0.001').attr('name', `items[${i}][quantity]`);
         $row.find('.cost').attr('name', `items[${i}][unit_cost]`).val(product.cost_price_raw ?? '');
 
         $('#lines').append($row);

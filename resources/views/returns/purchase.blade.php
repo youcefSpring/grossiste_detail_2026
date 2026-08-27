@@ -45,7 +45,7 @@
                             <td class="num text-slate-500"><bdi>{{ (float) $item->quantity }}</bdi></td>
                             <td class="num font-medium">{{ $left }}</td>
                             <td>
-                                <input type="number" name="items[{{ $i }}][quantity]" step="0.001" min="0" max="{{ $left }}"
+                                <input type="number" name="items[{{ $i }}][quantity]" step="{{ floor($left) == $left ? 1 : 0.001 }}" min="0" max="{{ $left }}"
                                        value="0" {{ $left <= 0 ? 'disabled' : '' }}
                                        class="qty w-full rounded-lg border-slate-300 px-2 py-2 text-end tabular-nums">
                             </td>

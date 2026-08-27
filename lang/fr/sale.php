@@ -43,4 +43,8 @@ return [
         'discount_amount' => 'Remise',
         'paid_amount' => 'Montant payé',
     ],
+    'payments' => 'Règlements',
+    'record_payment' => 'Enregistrer le règlement',
+    'payment_recorded' => 'Règlement de :amount enregistré.',
+    'payment_over_due' => 'Montant supérieur au reste à payer (:due).',
 ];
