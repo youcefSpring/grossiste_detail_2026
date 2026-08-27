@@ -55,4 +55,6 @@ return [
         'credit' => 'Off their debt',
         'exchange' => 'Exchange',
     ],
+    'recent_invoices' => 'Latest invoices',
+    'no_recent_match' => 'No recent invoice matches. Type the full number and search.',
 ];

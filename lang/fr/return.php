@@ -55,4 +55,6 @@ return [
         'credit' => 'Déduit de la dette',
         'exchange' => 'Échange',
     ],
+    'recent_invoices' => 'Dernières factures',
+    'no_recent_match' => 'Aucune facture récente ne correspond. Tapez le numéro complet et cherchez.',
 ];

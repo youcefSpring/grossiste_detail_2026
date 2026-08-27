@@ -39,7 +39,25 @@ class ReturnController extends Controller
         return view('returns.sale', [
             'sale' => $sale,
             'searched' => $request->filled('invoice'),
+            'recent' => $this->recentInvoices(),
         ]);
+    }
+
+    /**
+     * The invoices a customer is most likely to come back with.
+     *
+     * A return happens minutes or days after the sale, so the last ten
+     * invoices cover almost every case — and the employee never has to read a
+     * number off a crumpled receipt.
+     */
+    private function recentInvoices()
+    {
+        return Sale::with('customer:id,name')
+            ->where('status', 'completed')
+            ->latest('sold_at')
+            ->latest('id')
+            ->limit(10)
+            ->get(['id', 'invoice_number', 'customer_id', 'total', 'sold_at']);
     }
 
     public function storeSaleReturn(Request $request, Sale $sale)
@@ -82,6 +100,7 @@ class ReturnController extends Controller
         return view('returns.exchange', [
             'sale' => $sale,
             'searched' => $request->filled('invoice'),
+            'recent' => $this->recentInvoices(),
         ]);
     }
 
