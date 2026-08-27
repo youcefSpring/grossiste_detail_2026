@@ -100,14 +100,24 @@ $(function () {
     /* ---- Loading feedback ---- */
 
     // Any submitted form: disable the button, show a spinner, run the progress bar.
-    $(document).on('submit', 'form', function () {
+    $(document).on('submit', 'form', function (event) {
         // Modal forms are submitted over AJAX; modal.js owns their feedback.
         if ($(this).closest('#modal-body').length) return
 
-        const $button = $(this).find('button[type=submit], button:not([type])').first()
+        // Spin the button that was actually clicked. A form can carry several
+        // submit buttons that each mean something different (the language menu
+        // sends its choice as the button's own value).
+        const submitter = event.originalEvent && event.originalEvent.submitter
+        const $button = submitter
+            ? $(submitter)
+            : $(this).find('button[type=submit], button:not([type])').first()
 
         if ($button.length && !$button.data('no-spinner')) {
-            $button.prop('disabled', true).prepend('<span class="spinner me-2"></span>')
+            // After the current task, not during it: a button disabled inside the
+            // submit handler drops its own name/value from the request.
+            setTimeout(() => {
+                $button.prop('disabled', true).prepend('<span class="spinner me-2"></span>')
+            }, 0)
         }
 
         window.pageLoading(true)
