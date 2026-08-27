@@ -72,7 +72,7 @@ class ReportTest extends TestCase
         $expense = Expense::sole();
         $this->assertSame(1500000, (int) $expense->amount);   // 15 000,00 DZD
 
-        $this->get(route('expenses.index'))->assertOk()->assertSee('15 000,00');
+        $this->get(route('expenses.index'))->assertOk()->assertSee(money(1500000));
     }
 
     public function test_a_sales_employee_cannot_touch_expenses(): void
@@ -98,7 +98,7 @@ class ReportTest extends TestCase
         $this->assertSame(80000, $today->cost);
         $this->assertSame(20000, $today->profit);
 
-        $this->get(route('reports.show', 'sales_day'))->assertOk()->assertSee('1 000,00');
+        $this->get(route('reports.show', 'sales_day'))->assertOk()->assertSee(money(100000));
     }
 
     public function test_a_voided_sale_is_left_out_of_the_reports(): void

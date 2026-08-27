@@ -13,7 +13,11 @@ if (! function_exists('money')) {
     /** Centimes → "1 250,00". The currency symbol is added by the caller. */
     function money(int $centimes): string
     {
-        return number_format($centimes / 100, (int) Settings::get('currency.decimals', 2), ',', ' ');
+        // U+202F NARROW NO-BREAK SPACE groups the thousands. A plain space is a
+        // neutral character: inside an Arabic line the bidi algorithm hands it to
+        // the surrounding right-to-left run and "39 200,00" comes out as
+        // "200,00 39". U+202F is a common separator, so the figure stays whole.
+        return number_format($centimes / 100, (int) Settings::get('currency.decimals', 2), ',', "\u{202F}");
     }
 }
 

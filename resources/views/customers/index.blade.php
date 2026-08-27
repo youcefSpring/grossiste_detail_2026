@@ -34,9 +34,11 @@
 
     <div class="space-y-2">
         @forelse ($customers as $customer)
-            <div class="relative group">
+            {{-- The row is one card: the link fills it, the actions sit beside it
+                 rather than on top of the figures. --}}
+            <div class="flex items-center gap-2 bg-white rounded-2xl shadow-sm ps-4 pe-2 hover:bg-slate-50">
                 <a href="{{ route('customers.show', $customer) }}"
-                   class="flex items-center justify-between gap-3 bg-white rounded-2xl shadow-sm p-4 hover:bg-slate-50">
+                   class="flex-1 min-w-0 flex items-center justify-between gap-3 py-4">
                     <div class="min-w-0">
                         <div class="font-medium truncate">
                             {{ $customer->name }}
@@ -59,16 +61,16 @@
                 </a>
 
                 @can('customer.manage')
-                    <div class="absolute top-2 end-2 flex gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
+                    <div class="flex shrink-0 gap-1">
                         <x-action icon="edit" :label="__('common.edit')" :href="route('customers.edit', $customer)"
                                   data-modal data-modal-title="{{ __('customer.edit') }}"
-                                  class="bg-white/80" />
+                                  />
 
                         <x-action icon="delete" :label="__('common.delete')" tone="danger"
                                   data-modal-delete
                                   data-url="{{ route('customers.destroy', $customer) }}"
                                   data-message="{{ __('customer.delete_confirm') }}"
-                                  class="bg-white/80" />
+                                  />
                     </div>
                 @endcan
             </div>

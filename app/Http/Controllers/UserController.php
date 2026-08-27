@@ -87,7 +87,8 @@ class UserController extends Controller
             return $this->refuse(__('user.not_yourself'), route('users.index'));
         }
 
-        if ($user->hasRole('owner') && $this->ownerCount() <= 1) {
+        // Never let the shop end up with no owner at all.
+        if ($user->hasRole('owner') && User::role('owner')->where('is_active', true)->whereKeyNot($user->id)->doesntExist()) {
             return $this->refuse(__('user.last_owner'), route('users.index'));
         }
 

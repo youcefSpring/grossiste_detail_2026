@@ -145,15 +145,11 @@
 .table th.num {
     font-variant-numeric: tabular-nums;
     unicode-bidi: plaintext;
-    /* `plaintext` decides each cell's direction from its own content, so
-       `end` would land on different sides for "2 050,00" and "مدفوع" in the
-       same column. Pin the alignment to the page direction instead. */
+    /* Always right, in both directions. A figure is a left-to-right run, so
+       lining up its right edge is what puts the decimal points under each
+       other; `end` in Arabic would align the figures on their most significant
+       digit and leave the decimals ragged. */
     text-align: right;
-}
-
-[dir='rtl'] .table .num,
-[dir='rtl'] .table th.num {
-    text-align: left;
 }
 
 /* <bdi> already isolates and infers its own direction; this only stops a

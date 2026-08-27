@@ -211,6 +211,6 @@ class PurchaseTest extends TestCase
         $this->actingAsRole('manager');
         $this->post(route('purchases.store'), $this->payload());
 
-        $this->get(route('dashboard'))->assertOk()->assertSee('7 500,00');
+        $this->get(route('dashboard'))->assertOk()->assertSee(money(750000));
     }
 }

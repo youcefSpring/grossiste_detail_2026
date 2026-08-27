@@ -56,7 +56,7 @@
                         <td class="num" data-label="{{ __('product.fields.retail_price') }}"><bdi>{{ money($product->retail_price) }}</bdi></td>
                         <td class="num" data-label="{{ __('product.fields.wholesale_price') }}"><bdi>{{ money($product->wholesale_price) }}</bdi></td>
                         <td class="num" data-label="{{ __('product.fields.stock') }}">
-                            <bdi>{{ rtrim(rtrim(number_format($product->stock, 3, ',', ' '), '0'), ',') }}</bdi>
+                            <bdi>{{ rtrim(rtrim(number_format($product->stock, 3, ',', "\u{202F}"), '0'), ',') }}</bdi>
                         </td>
                         <td class="mid" data-label="{{ __('product.status') }}">
                             <x-stock-badge :status="$product->stock_status" />
