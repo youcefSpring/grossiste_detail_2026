@@ -21,13 +21,13 @@
 
         <label class="block space-y-1">
             <span class="text-sm text-slate-600">{{ __('auth.email') }}</span>
-            <input type="email" name="email" value="{{ old('email') }}" required autofocus
+            <input type="email" name="email" value="admin@grossiste.dz" required autofocus
                    class="w-full rounded-lg border-slate-300 px-3 py-2.5">
         </label>
 
         <label class="block space-y-1">
             <span class="text-sm text-slate-600">{{ __('auth.password') }}</span>
-            <input type="password" name="password" required
+            <input type="password" name="password" required value="password"
                    class="w-full rounded-lg border-slate-300 px-3 py-2.5">
         </label>
 
