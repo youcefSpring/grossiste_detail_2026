@@ -22,7 +22,7 @@ class PurchaseController extends Controller
             ->when($request->input('status') === 'due', fn ($q) => $q->where('due_amount', '>', 0))
             ->latest('purchased_at')
             ->latest('id')
-            ->paginate(25)
+            ->paginate(per_page())
             ->withQueryString();
 
         return view('purchases.index', [

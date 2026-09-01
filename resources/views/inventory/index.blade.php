@@ -37,6 +37,8 @@
         </select>
 
         <button class="rounded-lg bg-slate-900 text-white px-5 py-2.5">{{ __('app.search') }}</button>
+
+        @include('partials.per-page')
     </form>
 
     {{-- Desktop --}}

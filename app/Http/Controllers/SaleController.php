@@ -29,7 +29,7 @@ class SaleController extends Controller
                 fn ($q) => $q->where('user_id', $request->user()->id))
             ->latest('sold_at')
             ->latest('id')
-            ->paginate(25)
+            ->paginate(per_page())
             ->withQueryString();
 
         return view('sales.index', compact('sales'));

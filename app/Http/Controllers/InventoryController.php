@@ -27,7 +27,7 @@ class InventoryController extends Controller
             ->when($status === 'out', fn ($q) => $q->outOfStock())
             ->when($status === 'low', fn ($q) => $q->lowStock())
             ->orderBy('name')
-            ->paginate(25)
+            ->paginate(per_page())
             ->withQueryString();
 
         return view('inventory.index', [
@@ -47,7 +47,7 @@ class InventoryController extends Controller
             ->when($request->filled('from'), fn ($q) => $q->whereDate('created_at', '>=', $request->date('from')))
             ->when($request->filled('to'), fn ($q) => $q->whereDate('created_at', '<=', $request->date('to')))
             ->latest('id')
-            ->paginate(50)
+            ->paginate(per_page())
             ->withQueryString();
 
         return view('inventory.movements', [

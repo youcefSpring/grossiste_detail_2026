@@ -18,9 +18,9 @@ class ReturnController extends Controller
     {
         return view('returns.index', [
             'saleReturns' => SaleReturn::with('customer:id,name', 'sale:id,invoice_number')
-                ->latest('returned_at')->latest('id')->paginate(20, ['*'], 'sales_page'),
+                ->latest('returned_at')->latest('id')->paginate(per_page(), ['*'], 'sales_page'),
             'purchaseReturns' => PurchaseReturn::with('supplier:id,name', 'purchase:id,reference')
-                ->latest('returned_at')->latest('id')->paginate(20, ['*'], 'purchases_page'),
+                ->latest('returned_at')->latest('id')->paginate(per_page(), ['*'], 'purchases_page'),
         ]);
     }
 

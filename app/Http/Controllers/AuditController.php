@@ -18,7 +18,7 @@ class AuditController extends Controller
             ->when($request->filled('from'), fn ($q) => $q->whereDate('created_at', '>=', $request->date('from')))
             ->when($request->filled('to'), fn ($q) => $q->whereDate('created_at', '<=', $request->date('to')))
             ->latest('id')
-            ->paginate(50)
+            ->paginate(per_page())
             ->withQueryString();
 
         return view('audit.index', [

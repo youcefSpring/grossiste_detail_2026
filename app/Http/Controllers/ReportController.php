@@ -61,7 +61,7 @@ class ReportController extends Controller
 
         return view('reports.show', [
             'report' => $report,
-            'rows' => $isQuery ? $result->paginate(100)->withQueryString() : $result,
+            'rows' => $isQuery ? $result->paginate(per_page(100))->withQueryString() : $result,
             'totals' => $report === 'inventory' ? $this->reports->inventoryTotals() : null,
             'from' => $from,
             'to' => $to,

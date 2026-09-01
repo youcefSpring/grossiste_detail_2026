@@ -15,6 +15,8 @@
 
         <button class="rounded-lg bg-slate-900 text-white px-5 py-2.5">{{ __('app.search') }}</button>
 
+        @include('partials.per-page')
+
         @can('sale.create')
             <a href="{{ route('sales.create') }}"
                class="rounded-lg bg-emerald-600 text-white px-5 py-2.5 ms-auto">+ {{ __('nav.new_sale') }}</a>

@@ -31,6 +31,8 @@
         <input type="date" name="to" value="{{ request('to') }}" class="rounded-lg border-slate-300 px-3 py-2.5">
 
         <button class="rounded-lg bg-slate-900 text-white px-5 py-2.5">{{ __('app.search') }}</button>
+
+        @include('partials.per-page')
     </form>
 
     <div class="space-y-2">
