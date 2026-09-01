@@ -5,7 +5,8 @@
 <div id="modal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="absolute inset-0 bg-slate-900/50" data-modal-dismiss></div>
 
-    <div class="absolute inset-0 flex items-start justify-center p-2 sm:p-6 overflow-y-auto">
+    {{-- The scroller covers the backdrop, so it carries the outside-click itself. --}}
+    <div id="modal-scroll" class="absolute inset-0 flex items-start justify-center p-2 sm:p-6 overflow-y-auto">
         <div id="modal-panel"
              class="relative w-full max-w-4xl bg-slate-50 rounded-2xl shadow-xl my-auto
                     transition duration-150 opacity-0 translate-y-2">
@@ -33,7 +34,7 @@
 <div id="confirm-modal" class="fixed inset-0 z-[55] hidden" role="dialog" aria-modal="true">
     <div class="absolute inset-0 bg-slate-900/50" data-confirm-dismiss></div>
 
-    <div class="absolute inset-0 flex items-center justify-center p-4">
+    <div id="confirm-scroll" class="absolute inset-0 flex items-center justify-center p-4">
         <div class="relative w-full max-w-sm bg-white rounded-2xl shadow-xl p-5 space-y-4">
             <p id="confirm-message" class="text-slate-700"></p>
 

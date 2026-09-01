@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'view_classic' => 'Vue classique',
+    'view_modern' => 'Vue moderne',
     'menu' => 'Menu',
     'name' => 'Grossiste',
     'loading' => 'Chargement...',

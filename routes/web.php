@@ -6,6 +6,7 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\ExpenseController;
@@ -27,6 +28,11 @@ Route::post('locale', LocaleController::class)->name('locale');
 Route::middleware('auth')->group(function () {
     Route::post('logout', [LoginController::class, 'destroy'])->name('logout');
     Route::get('/', DashboardController::class)->name('dashboard');
+
+    // Own account: no permission gate, everyone manages their own details.
+    Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('profile/password', [ProfileController::class, 'password'])->name('profile.password');
 
     Route::get('ajax/products', [ProductController::class, 'search'])
         ->middleware('can:product.view')

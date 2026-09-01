@@ -145,6 +145,13 @@ export function modals() {
 
     $(document).on('click', '[data-modal-dismiss]', closeModal)
 
+    // Clicking beside the panel closes too. The scroll layer sits over the
+    // backdrop, so only a click that lands on the layer itself — not on the
+    // panel inside it — counts as outside.
+    $(document).on('mousedown', '#modal-scroll', function (event) {
+        if (event.target === this) closeModal()
+    })
+
     $(document).on('keydown', function (event) {
         if (event.key !== 'Escape') return
 
@@ -262,6 +269,11 @@ export function askConfirm(message, callback) {
 
 $(function () {
     $(document).on('click', '[data-confirm-dismiss]', closeConfirm)
+
+    // Same rule for the confirmation: a click beside the box cancels it.
+    $(document).on('mousedown', '#confirm-scroll', function (event) {
+        if (event.target === this) closeConfirm()
+    })
 
     $(document).on('click', '#confirm-accept', function () {
         const callback = onAccept

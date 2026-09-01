@@ -422,3 +422,274 @@ select:disabled {
         flex-basis: 100%;
     }
 }
+
+/* --- Classic skin ------------------------------------------------------
+   Same markup, second look: the desktop "Smart Stock" shape the shop is used
+   to — a ribbon of icon buttons on top instead of a side rail, a banded page
+   title, and dense ruled grids. Colours are taken from that program: the
+   Office periwinkle chrome, and the beige-on-cream data grid.
+   Driven by data-ui on <html> so it applies before first paint and switches
+   without a reload. Everything below is scoped to [data-ui='classic']. */
+
+[data-ui='classic'] {
+    --c-page: #dfe3ef;      /* desktop behind the window */
+    --c-chrome: #5b6ea8;    /* window title bar */
+    --c-ribbon: #eff1f8;    /* ribbon face */
+    --c-ribbon-edge: #b9c0d8;
+    --c-band: #ccd5ea;      /* the strip carrying the screen name */
+    --c-ink: #1f3864;       /* dark blue text on light chrome */
+    --c-hover: #dbe3f5;
+    --c-grid-head: #d8d4c8; /* grey-beige column headers */
+    --c-grid-line: #b5b0a0;
+    --c-grid-row: #f7f6ec;  /* cream rows */
+    --c-grid-alt: #efeee2;
+    --c-select: #9ec3e8;    /* selected row */
+    --c-panel: #f3f4f9;
+}
+
+/* The two marks in the header switch: one is shown per skin. */
+.ui-mark-classic { display: none; }
+[data-ui='classic'] .ui-mark-classic { display: inline; }
+[data-ui='classic'] .ui-mark-modern { display: none; }
+
+/* Skin changes are animated, so the switch reads as a transition rather
+   than a repaint. */
+[data-ui] #sidebar,
+[data-ui] #sidebar nav a,
+[data-ui] header,
+[data-ui] main {
+    transition: background-color 0.2s ease, color 0.2s ease, padding 0.2s ease,
+        border-radius 0.2s ease, width 0.15s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    [data-ui] #sidebar,
+    [data-ui] #sidebar nav a,
+    [data-ui] header,
+    [data-ui] main {
+        transition: none;
+    }
+}
+
+[data-ui='classic'] body {
+    background: var(--c-page);
+}
+
+/* The shell stacks: ribbon on top, page below. */
+[data-ui='classic'] body > div.min-h-screen {
+    flex-direction: column;
+}
+
+/* The rail becomes the ribbon: always visible, horizontal, scrollable when
+   the buttons do not fit — which is what makes it work on a phone. */
+[data-ui='classic'] #sidebar {
+    position: static;
+    display: flex !important;
+    flex-direction: row;
+    align-items: stretch;
+    width: 100%;
+    background: var(--c-ribbon);
+    color: var(--c-ink);
+    border-bottom: 1px solid var(--c-ribbon-edge);
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+/* The rail's brand block is the window title tab. */
+[data-ui='classic'] #sidebar > div:first-child {
+    height: auto;
+    border: 0;
+    border-inline-end: 1px solid var(--c-ribbon-edge);
+    padding-inline: 0.9rem;
+    background: var(--c-chrome);
+    color: #fff;
+    justify-content: center;
+}
+
+[data-ui='classic'] #sidebar #menu-close {
+    display: none;
+}
+
+[data-ui='classic'] #sidebar nav {
+    display: flex;
+    flex-direction: row;
+    gap: 0.15rem;
+    padding: 0.35rem 0.5rem;
+    overflow: visible;
+}
+
+/* Ribbon buttons: icon over label, like the toolbar it imitates. */
+[data-ui='classic'] #sidebar nav a {
+    flex-direction: column;
+    gap: 0.2rem;
+    justify-content: center;
+    min-width: 5rem;
+    padding: 0.4rem 0.5rem;
+    border-radius: 0.15rem;
+    border: 1px solid transparent;
+    color: var(--c-ink);
+    font-size: 0.72rem;
+    line-height: 1.15;
+    text-align: center;
+    white-space: nowrap;
+}
+
+[data-ui='classic'] #sidebar nav a span:first-child {
+    font-size: 1.35rem;
+}
+
+[data-ui='classic'] #sidebar nav a .sidebar-label {
+    max-width: 6.5rem;
+}
+
+[data-ui='classic'] #sidebar nav a:hover {
+    background: var(--c-hover);
+    border-color: var(--c-ribbon-edge);
+}
+
+/* The active screen is the pressed toolbar button. */
+[data-ui='classic'] #sidebar nav a[class*='bg-slate-800'] {
+    background: #fff;
+    border-color: var(--c-ribbon-edge);
+    color: var(--c-ink);
+    box-shadow: inset 0 1px 2px rgba(31, 56, 100, 0.18);
+}
+
+/* Collapsing the rail is meaningless in a ribbon; keep the labels. */
+@media (min-width: 1024px) {
+    [data-ui='classic'].sidebar-collapsed #sidebar {
+        width: 100%;
+    }
+
+    [data-ui='classic'].sidebar-collapsed #sidebar .sidebar-label {
+        display: block;
+    }
+
+    [data-ui='classic'].sidebar-collapsed #sidebar nav a {
+        padding-inline: 0.5rem;
+    }
+}
+
+[data-ui='classic'] #sidebar .sidebar-mark {
+    display: none !important;
+}
+
+/* No drawer to open, and no rail to collapse. */
+[data-ui='classic'] #menu-toggle,
+[data-ui='classic'] #overlay {
+    display: none !important;
+}
+
+/* Title band: the screen name on the pale blue strip, in dark blue. */
+[data-ui='classic'] header {
+    height: auto;
+    min-height: 3rem;
+    background: var(--c-band);
+    color: var(--c-ink);
+    border-bottom: 1px solid var(--c-ribbon-edge);
+    padding-block: 0.4rem;
+}
+
+[data-ui='classic'] header h1 {
+    font-size: 1.15rem;
+    letter-spacing: 0.01em;
+}
+
+[data-ui='classic'] header button,
+[data-ui='classic'] header summary,
+[data-ui='classic'] header a,
+[data-ui='classic'] header span {
+    color: var(--c-ink);
+}
+
+[data-ui='classic'] header button:hover,
+[data-ui='classic'] header summary:hover {
+    background: rgba(255, 255, 255, 0.55);
+}
+
+/* Menus dropped from the band stay on white. */
+[data-ui='classic'] header details > div,
+[data-ui='classic'] header details > div * {
+    color: #1e293b;
+}
+
+[data-ui='classic'] main {
+    padding: 0.75rem;
+}
+
+/* Panels: square, ruled, no soft shadow. */
+[data-ui='classic'] .rounded-2xl,
+[data-ui='classic'] .rounded-xl,
+[data-ui='classic'] .table-card {
+    border-radius: 0.15rem;
+}
+
+[data-ui='classic'] .shadow-sm,
+[data-ui='classic'] .table-card {
+    box-shadow: none;
+    border: 1px solid var(--c-grid-line);
+}
+
+/* Grids read as grids: tighter rows, a hard rule on every cell, the classic
+   blue selection tint on hover. */
+[data-ui='classic'] .table {
+    font-size: 0.82rem;
+}
+
+[data-ui='classic'] .table thead th {
+    background: var(--c-grid-head);
+    color: #26251d;
+    border-bottom: 1px solid var(--c-grid-line);
+}
+
+[data-ui='classic'] .table thead th + th,
+[data-ui='classic'] .table tbody td + td,
+[data-ui='classic'] .table tfoot td + td {
+    border-inline-start-color: var(--c-grid-line);
+}
+
+[data-ui='classic'] .table thead th,
+[data-ui='classic'] .table tbody td,
+[data-ui='classic'] .table tfoot td {
+    padding: 0.35rem 0.6rem;
+}
+
+[data-ui='classic'] .table tbody td {
+    background: var(--c-grid-row);
+    border-bottom: 1px solid #d9d5c6;
+}
+
+[data-ui='classic'] .table tbody tr:nth-child(even) td {
+    background: var(--c-grid-alt);
+}
+
+[data-ui='classic'] .table tfoot td {
+    background: var(--c-grid-head);
+    border-top: 1px solid var(--c-grid-line);
+}
+
+[data-ui='classic'] .table tbody tr:hover td {
+    background: var(--c-select);
+}
+
+/* Dashboard tiles keep the same data, in the flat panel style. */
+[data-ui='classic'] main .bg-white {
+    background: var(--c-panel);
+}
+
+/* On a phone the ribbon still scrolls, but the buttons shrink so more than
+   two fit on the strip. */
+@media (max-width: 639px) {
+    [data-ui='classic'] #sidebar nav a {
+        min-width: 4.25rem;
+        font-size: 0.65rem;
+    }
+
+    [data-ui='classic'] #sidebar nav a span:first-child {
+        font-size: 1.15rem;
+    }
+
+    [data-ui='classic'] #sidebar > div:first-child {
+        display: none;
+    }
+}

@@ -65,6 +65,26 @@ $(function () {
 
     $('#overlay, #menu-close').on('click', closeDrawer)
 
+    // Skin switch: classic ribbon vs modern rail. One attribute on <html>,
+    // remembered per browser; the CSS does the rest.
+    const syncUiToggle = () => {
+        const classic = document.documentElement.dataset.ui === 'classic'
+        const label = $('#ui-toggle').data(classic ? 'label-modern' : 'label-classic')
+        $('#ui-toggle').attr({ 'aria-label': label, title: label })
+    }
+
+    $('#ui-toggle').on('click', function () {
+        const classic = document.documentElement.dataset.ui !== 'classic'
+        document.documentElement.dataset.ui = classic ? 'classic' : 'modern'
+        localStorage.setItem('ui', classic ? 'classic' : 'modern')
+
+        // The drawer has no meaning in the ribbon; leaving it open would strand it.
+        closeDrawer()
+        syncUiToggle()
+    })
+
+    syncUiToggle()
+
     // Leaving the drawer open while resizing up to desktop would strand it.
     $(window).on('resize', function () {
         if (isDesktop()) closeDrawer()

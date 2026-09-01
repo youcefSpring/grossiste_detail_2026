@@ -12,6 +12,9 @@
         if (localStorage.getItem('sidebar') === 'collapsed') {
             document.documentElement.classList.add('sidebar-collapsed');
         }
+
+        // Skin: 'classic' reshapes the same markup into the desktop ribbon look.
+        document.documentElement.dataset.ui = localStorage.getItem('ui') === 'classic' ? 'classic' : 'modern';
     </script>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -42,6 +45,16 @@
                  until the menu is open. --}}
             @php($flags = ['ar' => ['🇩🇿', 'العربية'], 'fr' => ['🇫🇷', 'Français'], 'en' => ['🇬🇧', 'English']])
 
+            {{-- Skin switch: same pages, two looks. Purely client side, no reload. --}}
+            <button id="ui-toggle" type="button"
+                    class="shrink-0 rounded-lg px-2 py-1.5 text-lg leading-none hover:bg-slate-100"
+                    data-label-classic="{{ __('app.view_classic') }}"
+                    data-label-modern="{{ __('app.view_modern') }}"
+                    aria-label="{{ __('app.view_classic') }}" title="{{ __('app.view_classic') }}">
+                <span class="ui-mark-modern">🖥️</span>
+                <span class="ui-mark-classic">✨</span>
+            </button>
+
             <form id="locale-form" method="POST" action="{{ route('locale') }}" class="shrink-0">
                 @csrf
                 <details id="locale-menu" class="relative">
@@ -65,7 +78,12 @@
 
             @include('partials.alerts')
 
-            <span class="text-sm text-slate-600 hidden md:inline truncate max-w-40">{{ auth()->user()->name }}</span>
+            {{-- The name is the way into the account page; on a phone the mark alone. --}}
+            <a href="{{ route('profile.edit') }}" title="{{ __('profile.title') }}"
+               class="shrink-0 flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-slate-600 hover:bg-slate-100">
+                <span class="text-lg leading-none">👤</span>
+                <span class="hidden md:inline truncate max-w-40">{{ auth()->user()->name }}</span>
+            </a>
 
             {{-- One control at every width: the power mark ends the session. --}}
             <form id="logout-form" method="POST" action="{{ route('logout') }}" class="shrink-0">
