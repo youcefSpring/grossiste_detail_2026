@@ -32,6 +32,7 @@ let inFlight = null
 function show() {
     lastFocused = document.activeElement
     $('#modal').removeClass('hidden')
+    $('body').addClass('modal-open')
     $('body').addClass('overflow-hidden')
     // Next frame, so the transition has a starting point to animate from.
     requestAnimationFrame(() => $('#modal-panel').removeClass('opacity-0 translate-y-2'))
@@ -43,6 +44,7 @@ export function closeModal() {
 
     $('#modal-panel').addClass('opacity-0 translate-y-2')
     $('#modal').addClass('hidden')
+    if ($('#confirm-modal').hasClass('hidden')) $('body').removeClass('modal-open')
     $('#modal-body').html(SKELETON)
     $('#modal-title').text('')
     $('body').removeClass('overflow-hidden')
@@ -257,12 +259,14 @@ let onAccept = null
 
 function closeConfirm() {
     $('#confirm-modal').addClass('hidden')
+    if ($('#modal').hasClass('hidden')) $('body').removeClass('modal-open')
     onAccept = null
 }
 
 export function askConfirm(message, callback) {
     $('#confirm-message').text(message)
     $('#confirm-modal').removeClass('hidden')
+    $('body').addClass('modal-open')
     onAccept = callback
     $('#confirm-accept').trigger('focus')
 }

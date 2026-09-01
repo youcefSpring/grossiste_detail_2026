@@ -9,6 +9,20 @@
         'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
+/* Nothing scrolls the page sideways: a wide table scrolls inside its own card,
+   and the ribbon inside itself. Only the vertical page scroll remains. */
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* While a dialog is open the page behind it must not scroll too — two
+   scrollbars at once is what makes the modal feel loose. */
+body.modal-open {
+    overflow: hidden;
+}
+
 /* Arabic reads better slightly larger. */
 [dir='rtl'] body {
     font-size: 1.02rem;
@@ -675,6 +689,37 @@ select:disabled {
 /* Dashboard tiles keep the same data, in the flat panel style. */
 [data-ui='classic'] main .bg-white {
     background: var(--c-panel);
+}
+
+/* Only the ribbon scrolls sideways. Without this the wide strip widens the
+   whole column and the page ends up scrolling in both directions at once. */
+[data-ui='classic'] body {
+    overflow-x: hidden;
+}
+
+[data-ui='classic'] body > div.min-h-screen,
+[data-ui='classic'] body > div.min-h-screen > div,
+[data-ui='classic'] header,
+[data-ui='classic'] main {
+    max-width: 100%;
+    min-width: 0;
+}
+
+[data-ui='classic'] main {
+    overflow-x: hidden;
+}
+
+[data-ui='classic'] #sidebar {
+    max-width: 100%;
+    flex: 0 0 auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+}
+
+/* The sticky header belongs to the page, not to the ribbon's scroll box. */
+[data-ui='classic'] header {
+    position: sticky;
+    inset-inline-start: 0;
 }
 
 /* On a phone the ribbon still scrolls, but the buttons shrink so more than
